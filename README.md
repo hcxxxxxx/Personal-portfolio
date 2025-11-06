@@ -1,36 +1,171 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Modern Personal Portfolio Website
 
-## Getting Started
+A modern, responsive personal portfolio website built with Next.js, TypeScript, Tailwind CSS, and Framer Motion. Features smooth scroll-snap navigation, interactive AI chat assistant, and pixel-perfect design.
 
-First, run the development server:
+## ✨ Features
 
+- **Smooth Scroll Navigation**: Single-page application with scroll-snap functionality
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Interactive Sections**:
+  - Hero section with animated profile photo and social links
+  - Experience & Projects with tabbed interface
+  - AI Chat Assistant with simulated conversations
+  - Contact form with validation and success states
+- **Side Navigation**: Floating navigation dots with active states and tooltips
+- **Modern Animations**: Powered by Framer Motion for smooth transitions
+- **Dark Theme**: Professional dark color scheme with blue accents
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org) with App Router
+- **Language**: [TypeScript](https://www.typescriptlang.org)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **Animations**: [Framer Motion](https://www.framer.com/motion)
+- **Icons**: [Lucide React](https://lucide.dev)
+- **Fonts**: Google Fonts (Poppins, Inter)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm/yarn/pnpm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd personal-portfolio
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Start the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── globals.css          # Global styles and design system
+│   ├── layout.tsx           # Root layout component
+│   └── page.tsx             # Main page with section management
+├── components/
+│   ├── SideNav.tsx          # Floating navigation component
+│   ├── HeroSection.tsx      # Introduction section
+│   ├── ExperienceSection.tsx # Experience and projects
+│   ├── AIChatSection.tsx    # Interactive chat interface
+│   └── ContactSection.tsx   # Contact form
+public/
+├── profile.jpg              # Profile photo
+└── ...                      # Other static assets
+```
 
-## Learn More
+## 🎨 Design System
 
-To learn more about Next.js, take a look at the following resources:
+The website uses a carefully crafted design system:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Color Palette
+- **Background**: `#111827` (Dark blue-gray)
+- **Content Background**: `#1F2937` (Lighter gray for cards)
+- **Primary**: `#38BDF8` (Bright sky blue)
+- **Secondary**: `#818CF8` (Soft indigo)
+- **Text Primary**: `#F9FAFB` (Near white)
+- **Text Secondary**: `#9CA3AF` (Medium gray)
+- **Border**: `#374151` (Low contrast gray)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Typography
+- **Headings**: Poppins (700 weight)
+- **Body**: Inter (400/600 weight)
+- **Fluid scaling**: Responsive font sizes using clamp()
 
-## Deploy on Vercel
+### Spacing
+- **Base unit**: 8px
+- **Container**: Max-width 1100px with 24px horizontal padding
+- **Sections**: Full viewport height (100vh)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📱 Responsive Design
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The website is fully responsive with breakpoints:
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+## 🤖 AI Chat Feature
+
+The AI chat assistant includes:
+- Welcome message on load
+- Simulated typing indicators
+- Context-aware responses about experience, projects, and skills
+- Smooth message animations
+- Mobile-optimized chat interface
+
+## 📝 Customization
+
+To customize the website for your own use:
+
+1. **Update personal information** in `HeroSection.tsx`:
+   - Name, title, description
+   - Social media links
+   - Profile photo (`public/profile.jpg`)
+
+2. **Add your experience** in `ExperienceSection.tsx`:
+   - Update the `experiences` and `projects` arrays
+   - Modify technologies, descriptions, and links
+
+3. **Customize AI responses** in `AIChatSection.tsx`:
+   - Update the `simulateAIResponse` function
+   - Add your specific information and personality
+
+4. **Update contact information** in `ContactSection.tsx`:
+   - Change email address
+   - Integrate with your preferred form service
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Connect your repository to [Vercel](https://vercel.com)
+3. Deploy automatically with each push
+
+### Other Platforms
+
+The app can be deployed to any platform that supports Next.js:
+- Netlify
+- AWS Amplify
+- Railway
+- Render
+
+Build the project:
+```bash
+npm run build
+```
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](issues).
+
+## 📞 Support
+
+If you have any questions or need help customizing the website, feel free to reach out or create an issue.

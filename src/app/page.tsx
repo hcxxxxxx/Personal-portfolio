@@ -1,103 +1,97 @@
-import Image from "next/image";
+'use client';
 
+import { useState, useEffect, useMemo, useRef, cloneElement } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import HeroSection from '@/components/HeroSection';
+import InteractiveExperience from '@/components/InteractiveExperience';
+import AIChatSection from '@/components/AIChatSection';
+import ContactSection from '@/components/ContactSection';
+import SideNav from '@/components/SideNav';
+
+// 定义视图类型的联合类型，用于表示当前显示的页面部分
+type View = 'hero' | 'experience' | 'chat' | 'contact';
+
+// 主页组件，管理整个单页应用的视图切换和状态
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // 'view' state 用于跟踪当前显示的页面部分
+  const [view, setView] = useState<View>('hero');
+  const prevViewRef = useRef<View>(view);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  useEffect(() => {
+    prevViewRef.current = view;
+  });
+  // 'isWheeling' state 用于防止滚轮事件在动画期间重复触发
+  const [isWheeling, setIsWheeling] = useState(false);
+
+  // 使用 useMemo 优化性能，定义所有可用的页面部分
+  // 每个部分包含一个唯一的 id, 对应的组件, 以及索引
+  const sections = useMemo(() => [
+    { id: 'hero' as View, component: <HeroSection />, index: 0 },
+    { id: 'experience' as View, component: <InteractiveExperience />, index: 1 },
+    { id: 'chat' as View, component: <div className="w-full h-full flex items-center justify-center"><AIChatSection /></div>, index: 2 },
+    { id: 'contact' as View, component: <div className="w-full h-full flex items-center justify-center"><ContactSection /></div>, index: 3 },
+  ], []);
+
+  // useEffect 用于处理鼠标滚轮事件，实现页面内容的滚动切换
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (isWheeling) return; // 如果正在滚动动画中，则忽略新的滚动事件
+
+      const currentSectionIndex = sections.findIndex(s => s.id === view);
+      let nextView: View | null = null;
+
+      // 向下滚动，且不是最后一个部分
+      if (e.deltaY > 5 && currentSectionIndex < sections.length - 1) {
+        nextView = sections[currentSectionIndex + 1].id;
+      } 
+      // 向上滚动，且不是第一个部分
+      else if (e.deltaY < -5 && currentSectionIndex > 0) {
+        nextView = sections[currentSectionIndex - 1].id;
+      }
+
+      if (nextView) {
+        setView(nextView); // 更新视图
+        setIsWheeling(true); // 设置滚动锁定
+        // 1.2秒后解除锁定，以匹配动画时长
+        setTimeout(() => setIsWheeling(false), 1200);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel);
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [view, isWheeling, sections]);
+
+
+  // 根据当前 'view' state 找到要渲染的组件
+  const activeComponent = sections.find((sec) => sec.id === view)?.component;
+
+  // 侧边导航栏的导航处理函数
+  const handleNavigate = (newView: View) => {
+    if (isWheeling) return; // 防止在动画期间重复点击
+    setView(newView);
+    setIsWheeling(true);
+    setTimeout(() => setIsWheeling(false), 1200);
+  };
+
+  return (
+    <>
+      {/* 侧边导航栏，显示当前活动视图并处理导航 */}
+      <SideNav activeView={view} onNavigate={handleNavigate} />
+      {/* 主内容区域，占据整个屏幕 */}
+      <div className="relative w-screen h-screen overflow-hidden">
+        {/* AnimatePresence 用于处理组件进入和退出时的动画 */}
+        <AnimatePresence initial={false} custom={{ next: view, prev: prevViewRef.current }}>
+          {activeComponent && (
+            // motion.div 用于为视图切换添加动画效果
+            <motion.div
+              key={view} // key 的变化会触发组件的重新渲染和动画
+              className="absolute inset-0 w-full h-full"
+            >
+              {cloneElement(activeComponent, { custom: { next: view, prev: prevViewRef.current } })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }
