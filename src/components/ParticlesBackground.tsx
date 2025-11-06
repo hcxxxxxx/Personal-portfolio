@@ -45,7 +45,9 @@ const ParticlesBackground = () => {
             enable: true,
             mode: 'grab',
           },
-          resize: true,
+          resize: {
+            enable: true,
+          },
         },
         modes: {
           // 抓取效果的配置

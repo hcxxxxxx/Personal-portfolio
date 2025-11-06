@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTypewriter } from '@/hooks/useTypewriter';
 
@@ -57,10 +58,12 @@ const HeroSection = () => {
           transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
         >
           {/* 个人头像 */}
-          <img
+          <Image
             src="/profile.jpg"
             alt={texts.hero.name}
-            className="w-full h-full rounded-full object-cover border-4 border-slate-800 shadow-2xl"
+            fill
+            className="rounded-full object-cover border-4 border-slate-800 shadow-2xl"
+            priority
           />
         </motion.div>
       </div>

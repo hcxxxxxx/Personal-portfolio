@@ -2,7 +2,6 @@
 
 import { Languages } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Language } from '@/locales';
 import { motion } from 'framer-motion';
 
 export default function LanguageToggle() {

@@ -14,11 +14,9 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   // 初始状态：服务器端和客户端都使用默认值 'zh'，确保水合一致
   const [language, setLanguageState] = useState<Language>('zh');
-  const [isMounted, setIsMounted] = useState(false);
 
   // 客户端挂载后，从 localStorage 读取保存的语言设置
   useEffect(() => {
-    setIsMounted(true);
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('language') as Language;
       if (saved === 'zh' || saved === 'en') {

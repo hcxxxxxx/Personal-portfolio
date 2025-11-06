@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useTime, useTransform, Variants } from 'framer-motion';
 import { X } from 'lucide-react';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTypewriter } from '@/hooks/useTypewriter';
+import { LocaleTexts } from '@/locales';
 
 // --- 动画变体定义 ---
 
@@ -118,7 +120,7 @@ interface DetailCardProps {
 
 // --- 数据 ---
 // 根据语言获取经历数据的函数
-const getExperienceData = (texts: any): ExperienceItem[] => [
+const getExperienceData = (texts: LocaleTexts): ExperienceItem[] => [
   {
     id: 'education',
     logo: '/degree.svg',
@@ -229,9 +231,16 @@ const Planet = ({ item, index, onSelect, orbit, color }: PlanetProps) => {
       whileHover={{ scale: 1.2, transition: { duration: 0.2 } }}
     >
       {/* 行星的视觉实体，应用了霓虹脉冲效果 */}
-      <div className="planet-orb flex h-full w-full items-center justify-center rounded-full">
+      <div className="planet-orb flex h-full w-full items-center justify-center rounded-full relative">
         {item.logo ? (
-          <img src={item.logo} alt={item.title} className="h-3/5 w-3/5 object-contain" />
+          <Image 
+            src={item.logo} 
+            alt={item.title} 
+            width={orbit.size * 0.6} 
+            height={orbit.size * 0.6}
+            className="object-contain"
+            unoptimized
+          />
         ) : (
           <span className="p-1 text-center text-[10px] font-bold text-slate-300">{item.title}</span>
         )}
@@ -349,16 +358,22 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
         className="relative w-80 h-80"
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       >
-        <motion.img
-          src="/profile.jpg"
-          alt={texts.hero.name}
-          className="w-full h-full rounded-full object-cover border-4 border-slate-800 shadow-2xl"
+        <motion.div
           variants={profileImageVariants}
           custom={custom}
           initial="initial"
           animate="animate"
           exit="exit"
-        />
+          className="w-full h-full relative"
+        >
+          <Image
+            src="/profile.jpg"
+            alt={texts.hero.name}
+            fill
+            className="rounded-full object-cover border-4 border-slate-800 shadow-2xl"
+            priority
+          />
+        </motion.div>
       </motion.div>
 
       {/* 太阳系的中心点，所有行星和轨道都相对于此定位 */}

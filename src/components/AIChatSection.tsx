@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Send, CornerDownLeft, User, Bot } from 'lucide-react';
+import { Send, User, Bot } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTypewriter } from '@/hooks/useTypewriter';
 
