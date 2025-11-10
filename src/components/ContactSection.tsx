@@ -8,8 +8,8 @@ import { useTypewriter } from '@/hooks/useTypewriter';
 // 联系表单部分组件
 const ContactSection = () => {
   const { texts } = useLanguage();
-  const { displayText: titleText } = useTypewriter(texts.contact.title, { speed: 50, delay: 200 });
-  const { displayText: subtitleText } = useTypewriter(texts.contact.subtitle, { speed: 20, delay: 600 });
+  const { displayText: titleText } = useTypewriter(texts.contact.title, { speed: 25, delay: 200 });
+  const { displayText: subtitleText } = useTypewriter(texts.contact.subtitle, { speed: 10, delay: 600 });
   
   // 表单字段的状态
   const [name, setName] = useState('');

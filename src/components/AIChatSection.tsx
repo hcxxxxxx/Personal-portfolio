@@ -16,7 +16,7 @@ interface Message {
 
 // AI 消息组件（带打字机效果）
 const AIMessage = ({ content }: { content: string }) => {
-  const { displayText, isTyping } = useTypewriter(content, { speed: 20, delay: 0 });
+  const { displayText, isTyping } = useTypewriter(content, { speed: 10, delay: 0 });
   
   return (
     <p className="whitespace-pre-wrap">

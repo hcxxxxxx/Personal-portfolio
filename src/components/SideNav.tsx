@@ -16,8 +16,8 @@ interface SideNavProps {
 
 // 提示框内容组件（带打字机效果）
 const TooltipContent = ({ name, description }: { name: string; description: string }) => {
-  const { displayText: nameText } = useTypewriter(name, { speed: 40, delay: 0 });
-  const { displayText: descText } = useTypewriter(description, { speed: 20, delay: 150 });
+  const { displayText: nameText } = useTypewriter(name, { speed: 20, delay: 0 });
+  const { displayText: descText } = useTypewriter(description, { speed: 10, delay: 150 });
   
   return (
     <div className="absolute right-full mr-5 top-1/2 transform -translate-y-1/2 glass-card px-5 py-3 text-sm font-semibold rounded-lg whitespace-nowrap opacity-0 animate-fade-in border border-white/10 shadow-xl">

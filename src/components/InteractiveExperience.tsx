@@ -252,9 +252,9 @@ const Planet = ({ item, index, onSelect, orbit, color }: PlanetProps) => {
 // 点击行星后显示的详情卡片
 const DetailCard = ({ item, onDeselect }: DetailCardProps) => {
   const title = item.content.company || item.content.school || item.content.name || '';
-  const { displayText: titleText } = useTypewriter(title, { speed: 50, delay: 100 });
-  const { displayText: roleText } = useTypewriter(item.content.role || '', { speed: 40, delay: 400 });
-  const { displayText: dateText } = useTypewriter(item.content.date || '', { speed: 30, delay: 600 });
+  const { displayText: titleText } = useTypewriter(title, { speed: 25, delay: 100 });
+  const { displayText: roleText } = useTypewriter(item.content.role || '', { speed: 20, delay: 400 });
+  const { displayText: dateText } = useTypewriter(item.content.date || '', { speed: 15, delay: 600 });
   
   return (
     // 卡片容器，带有进入和退出动画
@@ -326,7 +326,7 @@ const DetailPoints = ({ points }: { points: string[] }) => {
 
 // 单个点项组件（带打字机效果）
 const PointItem = ({ point, delay }: { point: string; delay: number }) => {
-  const { displayText } = useTypewriter(point, { speed: 20, delay });
+  const { displayText } = useTypewriter(point, { speed: 10, delay });
   
   return (
     <li>

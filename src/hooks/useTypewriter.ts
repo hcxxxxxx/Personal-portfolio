@@ -14,7 +14,7 @@ interface UseTypewriterOptions {
  * @returns 当前显示的文字
  */
 export function useTypewriter(text: string, options: UseTypewriterOptions = {}) {
-  const { speed = 30, delay = 0 } = options;
+  const { speed = 15, delay = 0 } = options;
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   
