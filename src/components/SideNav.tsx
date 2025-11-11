@@ -20,7 +20,7 @@ const TooltipContent = ({ name, description }: { name: string; description: stri
   const { displayText: descText } = useTypewriter(description, { speed: 10, delay: 150 });
   
   return (
-    <div className="absolute right-full mr-5 top-1/2 transform -translate-y-1/2 glass-card px-5 py-3 text-sm font-semibold rounded-lg whitespace-nowrap opacity-0 animate-fade-in border border-white/10 shadow-xl">
+    <div className="absolute left-full ml-5 top-1/2 transform -translate-y-1/2 glass-card px-5 py-3 text-sm font-semibold rounded-lg whitespace-nowrap opacity-0 animate-fade-in border border-white/10 shadow-xl">
       <div className="flex items-center space-x-3">
         <span className="gradient-text font-bold">{nameText}</span>
       </div>
@@ -28,7 +28,7 @@ const TooltipContent = ({ name, description }: { name: string; description: stri
         {descText}
       </div>
       {/* 提示框的小尾巴 */}
-      <div className="absolute right-[-6px] top-1/2 transform -translate-y-1/2 h-3 w-3 rotate-45 bg-slate-800/50 border-r border-t border-white/10 backdrop-blur-sm"></div>
+      <div className="absolute left-[-6px] top-1/2 transform -translate-y-1/2 h-3 w-3 rotate-45 bg-slate-800/50 border-l border-b border-white/10 backdrop-blur-sm"></div>
     </div>
   );
 };
@@ -54,8 +54,8 @@ export default function SideNav({ activeView, onNavigate }: SideNavProps) {
   const isVisited = (sectionIndex: number) => sectionIndex <= activeIndex;
 
   return (
-    // 导航栏容器，固定在屏幕右侧中间，仅在 md 及以上屏幕尺寸显示
-    <nav className="fixed right-4 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
+    // 导航栏容器，固定在屏幕左侧中间，仅在 md 及以上屏幕尺寸显示
+    <nav className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
       {/* 玻璃质感的卡片作为导航背景 */}
       <div className="relative glass-card p-3 backdrop-blur-lg border border-white/10 shadow-lg">
         <ul className="flex flex-col items-center space-y-4">
@@ -109,7 +109,7 @@ export default function SideNav({ activeView, onNavigate }: SideNavProps) {
       {/* 使用 JSX-style 定义局部动画，避免污染全局 CSS */}
       <style jsx>{`
         @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-50%) translateX(10px); }
+          from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
           to { opacity: 1; transform: translateY(-50%) translateX(0); }
         }
         .animate-fade-in { animation: fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }

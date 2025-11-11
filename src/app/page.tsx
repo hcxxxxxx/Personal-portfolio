@@ -16,6 +16,8 @@ export default function Home() {
   // 'view' state 用于跟踪当前显示的页面部分
   const [view, setView] = useState<View>('hero');
   const prevViewRef = useRef<View>(view);
+  // 'pendingView' 用于在圆形消失动画期间暂存目标视图
+  const [pendingView, setPendingView] = useState<View | null>(null);
 
   useEffect(() => {
     prevViewRef.current = view;
@@ -50,10 +52,22 @@ export default function Home() {
       }
 
       if (nextView) {
-        setView(nextView); // 更新视图
-        setIsWheeling(true); // 设置滚动锁定
-        // 1.2秒后解除锁定，以匹配动画时长
-        setTimeout(() => setIsWheeling(false), 1200);
+        // 如果从 hero 跳转到 experience，先设置 pendingView 触发消失动画
+        if (view === 'hero' && nextView === 'experience') {
+          setIsWheeling(true);
+          setPendingView(nextView); // 设置待跳转的视图，触发 HeroSection 的消失动画
+          // 等待圆形消失动画完成（0.8秒总时长 + 0.3秒单个动画时长 = 1.1秒）
+          setTimeout(() => {
+            setView(nextView);
+            setPendingView(null);
+            setTimeout(() => setIsWheeling(false), 1200);
+          }, 1100);
+        } else {
+          setView(nextView); // 更新视图
+          setIsWheeling(true); // 设置滚动锁定
+          // 1.2秒后解除锁定，以匹配动画时长
+          setTimeout(() => setIsWheeling(false), 1200);
+        }
       }
     };
 
@@ -68,9 +82,34 @@ export default function Home() {
   // 侧边导航栏的导航处理函数
   const handleNavigate = (newView: View) => {
     if (isWheeling) return; // 防止在动画期间重复点击
-    setView(newView);
-    setIsWheeling(true);
-    setTimeout(() => setIsWheeling(false), 1200);
+    
+    // 如果从 hero 跳转到 experience，先设置 pendingView 触发消失动画
+    if (view === 'hero' && newView === 'experience') {
+      setIsWheeling(true);
+      setPendingView(newView); // 设置待跳转的视图，触发 HeroSection 的消失动画
+      // 等待圆形消失动画完成（0.8秒总时长 + 0.3秒单个动画时长 = 1.1秒）
+      setTimeout(() => {
+        setView(newView);
+        setPendingView(null);
+        setTimeout(() => setIsWheeling(false), 1200);
+      }, 1100);
+    } 
+    // 如果从 experience 跳转到 hero，等待退出动画完成
+    else if (view === 'experience' && newView === 'hero') {
+      setIsWheeling(true);
+      setPendingView(newView); // 设置待跳转的视图，触发 InteractiveExperience 的退出动画
+      // 等待 experience 页向下推出动画完成（1.0秒）
+      setTimeout(() => {
+        setView(newView);
+        setPendingView(null);
+        setTimeout(() => setIsWheeling(false), 1200);
+      }, 1000);
+    } 
+    else {
+      setView(newView);
+      setIsWheeling(true);
+      setTimeout(() => setIsWheeling(false), 1200);
+    }
   };
 
   return (
@@ -87,7 +126,7 @@ export default function Home() {
               key={view} // key 的变化会触发组件的重新渲染和动画
               className="absolute inset-0 w-full h-full"
             >
-              {cloneElement(activeComponent, { custom: { next: view, prev: prevViewRef.current } })}
+              {cloneElement(activeComponent, { custom: { next: pendingView || view, prev: prevViewRef.current } })}
             </motion.div>
           )}
         </AnimatePresence>

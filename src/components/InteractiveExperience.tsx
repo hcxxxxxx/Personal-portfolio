@@ -347,14 +347,37 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
   const [selectedItem, setSelectedItem] = useState<ExperienceItem | null>(null);
   const colors = ['#00aaff', '#ff00ff', '#00ffaa', '#ffaa00', '#aaff00'];
 
+  // 容器退出动画变体：向下推出屏幕（带加速度效果）
+  const containerVariants: Variants = {
+    initial: {},
+    animate: {},
+    exit: (custom?: CustomAnimationProps) => {
+      if (custom?.next === 'hero') {
+        return {
+          y: '100%',
+          transition: {
+            duration: 1.0, // 更慢的速度
+            ease: [0.4, 0, 0.6, 1], // 加速度效果：开始慢，然后加速
+          }
+        };
+      }
+      return {};
+    }
+  };
+
   return (
     // 整个交互式体验区域的容器
     <motion.div
       className="relative w-full h-full flex items-center justify-center"
+      variants={containerVariants}
+      custom={custom}
+      initial="initial"
+      animate="animate"
+      exit="exit"
     >
       {/* 中心个人头像，作为太阳系中心 */}
       <motion.div
-        layoutId="profile-image-container" // 与 HeroSection 的头像共享布局动画
+        layoutId="profile-image-container" // 与 HeroSection 的头像共享布局动画（仅用于 hero -> experience）
         className="relative w-80 h-80"
         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       >
