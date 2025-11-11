@@ -22,12 +22,28 @@ interface InteractiveExperienceProps {
 }
 
 const profileImageVariants: Variants = {
-  initial: (custom?: CustomAnimationProps) => ({
-    opacity: custom?.prev === 'chat' ? 0 : 1,
-  }),
-  animate: {
-    opacity: 1,
-    transition: { duration: 0.7, delay: 0.2 }
+  initial: (custom?: CustomAnimationProps) => {
+    // 从 hero 来时，不应用内层的透明度动画，让外层完全控制透明度
+    if (custom?.prev === 'hero' && custom?.next === 'experience') {
+      return {
+        opacity: 1, // 保持完全不透明，让外层处理透明度过渡
+      };
+    }
+    return {
+      opacity: custom?.prev === 'chat' ? 0 : 1,
+    };
+  },
+  animate: (custom?: CustomAnimationProps) => {
+    // 从 hero 来时，保持完全不透明，让外层处理透明度过渡
+    if (custom?.prev === 'hero' && custom?.next === 'experience') {
+      return {
+        opacity: 1, // 始终保持完全不透明，外层会处理透明度过渡
+      };
+    }
+    return {
+      opacity: 1,
+      transition: { duration: 0.7, delay: 0.2 }
+    };
   },
   exit: (custom?: CustomAnimationProps) => {
     if (custom?.next === 'chat') {
@@ -346,6 +362,33 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
   // 当前选中的经历项目
   const [selectedItem, setSelectedItem] = useState<ExperienceItem | null>(null);
   const colors = ['#00aaff', '#ff00ff', '#00ffaa', '#ffaa00', '#aaff00'];
+  
+  // 控制透明度动画的触发时机，确保与 layoutId 动画同步
+  const [shouldAnimateOpacity, setShouldAnimateOpacity] = useState(false);
+  const [opacityAnimationComplete, setOpacityAnimationComplete] = useState(false);
+  
+  // 当从 hero 页跳转过来时，在 layoutId 动画开始时触发透明度动画
+  useEffect(() => {
+    if (custom?.prev === 'hero' && custom?.next === 'experience') {
+      // 使用 requestAnimationFrame 确保在 layoutId 动画开始时触发
+      const rafId = requestAnimationFrame(() => {
+        setShouldAnimateOpacity(true);
+      });
+      
+      // 在动画完成后（0.7秒后），确保透明度保持在 1
+      const timeoutId = setTimeout(() => {
+        setOpacityAnimationComplete(true);
+      }, 700); // 与动画时长一致
+      
+      return () => {
+        cancelAnimationFrame(rafId);
+        clearTimeout(timeoutId);
+      };
+    } else {
+      setShouldAnimateOpacity(false);
+      setOpacityAnimationComplete(false);
+    }
+  }, [custom]);
 
   // 容器退出动画变体：向下推出屏幕（带加速度效果）
   const containerVariants: Variants = {
@@ -379,7 +422,33 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
       <motion.div
         layoutId="profile-image-container" // 与 HeroSection 的头像共享布局动画（仅用于 hero -> experience）
         className="relative w-80 h-80"
-        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+        layout // 启用 layout 动画，确保所有属性（包括 opacity）与 layoutId 同步
+        style={{
+          // 动画完成后，确保透明度保持在 1
+          opacity: opacityAnimationComplete ? 1 : undefined
+        }}
+        transition={{ 
+          layout: {
+            duration: 0.7, 
+            ease: [0.4, 0, 0.2, 1]
+          },
+          // 从 hero 来时，透明度过渡与 layoutId 动画完全同步
+          opacity: custom?.prev === 'hero' && custom?.next === 'experience' ? { 
+            duration: 0.7, 
+            ease: [0.4, 0, 0.2, 1] 
+          } : undefined
+        }}
+        onLayoutAnimationStart={() => {
+          // 当 layoutId 动画开始时，触发透明度动画
+          if (custom?.prev === 'hero' && custom?.next === 'experience') {
+            setShouldAnimateOpacity(true);
+          }
+        }}
+        animate={
+          shouldAnimateOpacity && custom?.prev === 'hero' && custom?.next === 'experience' 
+            ? { opacity: 1 } // 过渡到完全不透明，与 layoutId 动画同步
+            : undefined
+        }
       >
         <motion.div
           variants={profileImageVariants}

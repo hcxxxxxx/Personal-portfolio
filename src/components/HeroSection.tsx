@@ -538,6 +538,14 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                       scale: 0,
                     };
                   }
+                  // 跳转到 experience 时，从当前透明度（baseOpacity）开始
+                  const isToExperience = custom?.next === 'experience' && custom?.prev === 'hero';
+                  if (isToExperience) {
+                    return {
+                      opacity: baseOpacity, // 从 hero 页的透明度开始
+                      scale: 1,
+                    };
+                  }
                   return {
                     opacity: baseOpacity, // 水平透明渐变
                     scale: 1,
@@ -572,6 +580,20 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                       }
                     };
                   }
+                  // 跳转到 experience 时，透明度从 baseOpacity 过渡到 1（完全不透明）
+                  // 注意：这个 animate 会在 experience 页显示时执行，与 layoutId 动画同步
+                  const isToExperience = custom?.next === 'experience' && custom?.prev === 'hero';
+                  if (isToExperience) {
+                    return {
+                      opacity: 1, // 过渡到完全不透明（experience 页中应该完全不透明）
+                      scale: 1,
+                      transition: { 
+                        duration: 0.7, 
+                        ease: [0.4, 0, 0.2, 1],
+                        // 不单独设置 opacity 的 transition，让它使用默认的 transition，与 layoutId 同步
+                      }
+                    };
+                  }
                   return {
                     opacity: baseOpacity,
                     scale: 1,
@@ -579,14 +601,7 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                   };
                 },
                 exit: (custom?: CustomAnimationProps) => {
-                  const baseOpacity = currentCenterCircle.opacity;
-                  if (custom?.next === 'experience') {
-                    return {
-                      opacity: baseOpacity,
-                      scale: 1,
-                      transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
-                    };
-                  }
+                  // exit 在组件离开时触发，对于 layoutId 动画，透明度过渡在 animate 中处理
                   return {};
                 }
               };
@@ -614,22 +629,22 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                         transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
                         initial={false} // 让内层 motion.div 处理 initial
                       >
-                        <motion.div
+        <motion.div 
                           variants={dynamicVariants}
                           custom={custom}
                           initial="initial"
                           animate="animate"
                           exit="exit"
-                          className="relative w-full h-full"
-                        >
-                          <Image
-                            src="/profile.jpg"
-                            alt={texts.hero.name}
-                            fill
-                            className="rounded-full object-cover border-4 border-slate-800 shadow-2xl"
-                            priority
-                          />
-                        </motion.div>
+          className="relative w-full h-full"
+        >
+          <Image
+            src="/profile.jpg"
+            alt={texts.hero.name}
+            fill
+            className="rounded-full object-cover border-4 border-slate-800 shadow-2xl"
+            priority
+          />
+        </motion.div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -638,6 +653,8 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
 
               // hero -> experience 时，使用 layoutId 实现神奇移动
               if (isToExperience) {
+                // 计算透明度：保持 hero 页的透明度，让 experience 页处理过渡
+                const baseOpacity = currentCenterCircle.opacity;
                 return (
                   <motion.div 
                     key="profile-image-container" // 使用固定的 key 确保 layoutId 匹配
@@ -648,17 +665,15 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                       top: `${currentCenterCircle.y}px`,
                       width: `${currentSize}px`,
                       height: `${currentSize}px`,
+                      opacity: baseOpacity, // 保持 hero 页的透明度，让 layoutId 动画时保持
                     }}
-                    transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+                    transition={{ 
+                      duration: 0.7, 
+                      ease: [0.4, 0, 0.2, 1],
+                      // 不在这里处理 opacity 过渡，让 experience 页处理
+                    }}
                   >
-                    <motion.div
-                      variants={dynamicVariants}
-                      custom={custom}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      className="relative w-full h-full"
-                    >
+                    <div className="relative w-full h-full">
                       <Image
                         src="/profile.jpg"
                         alt={texts.hero.name}
@@ -666,7 +681,7 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                         className="rounded-full object-cover border-4 border-slate-800 shadow-2xl"
                         priority
                       />
-                    </motion.div>
+                    </div>
                   </motion.div>
                 );
               }
