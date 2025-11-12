@@ -40,20 +40,34 @@ const AIMessage = ({
     }
   }, [displayText, isTyping, skipTypewriter, onTextUpdate]);
   
+  // Markdown 组件 Props 类型定义
+  interface MarkdownComponentProps {
+    children?: React.ReactNode;
+  }
+
+  interface CodeProps extends MarkdownComponentProps {
+    inline?: boolean;
+    className?: string;
+  }
+
+  interface LinkProps extends MarkdownComponentProps {
+    href?: string;
+  }
+
   // Markdown 渲染样式配置
   const markdownComponents = {
     // 段落样式
-    p: ({ children }: any) => <p className="mb-3 last:mb-0">{children}</p>,
+    p: ({ children }: MarkdownComponentProps) => <p className="mb-3 last:mb-0">{children}</p>,
     // 标题样式
-    h1: ({ children }: any) => <h1 className="text-xl font-bold mb-3 mt-4 first:mt-0 text-slate-100">{children}</h1>,
-    h2: ({ children }: any) => <h2 className="text-lg font-semibold mb-2 mt-3 first:mt-0 text-slate-100">{children}</h2>,
-    h3: ({ children }: any) => <h3 className="text-base font-semibold mb-2 mt-3 first:mt-0 text-slate-200">{children}</h3>,
+    h1: ({ children }: MarkdownComponentProps) => <h1 className="text-xl font-bold mb-3 mt-4 first:mt-0 text-slate-100">{children}</h1>,
+    h2: ({ children }: MarkdownComponentProps) => <h2 className="text-lg font-semibold mb-2 mt-3 first:mt-0 text-slate-100">{children}</h2>,
+    h3: ({ children }: MarkdownComponentProps) => <h3 className="text-base font-semibold mb-2 mt-3 first:mt-0 text-slate-200">{children}</h3>,
     // 列表样式
-    ul: ({ children }: any) => <ul className="list-disc list-inside mb-3 space-y-1 ml-2">{children}</ul>,
-    ol: ({ children }: any) => <ol className="list-decimal list-inside mb-3 space-y-1 ml-2">{children}</ol>,
-    li: ({ children }: any) => <li className="text-slate-200">{children}</li>,
+    ul: ({ children }: MarkdownComponentProps) => <ul className="list-disc list-inside mb-3 space-y-1 ml-2">{children}</ul>,
+    ol: ({ children }: MarkdownComponentProps) => <ol className="list-decimal list-inside mb-3 space-y-1 ml-2">{children}</ol>,
+    li: ({ children }: MarkdownComponentProps) => <li className="text-slate-200">{children}</li>,
     // 代码块样式
-    code: ({ inline, children, className }: any) => {
+    code: ({ inline, children, className }: CodeProps) => {
       if (inline) {
         return (
           <code className="bg-slate-700/50 text-cyan-300 px-1.5 py-0.5 rounded text-sm font-mono">
@@ -67,15 +81,15 @@ const AIMessage = ({
         </code>
       );
     },
-    pre: ({ children }: any) => <pre className="mb-3">{children}</pre>,
+    pre: ({ children }: MarkdownComponentProps) => <pre className="mb-3">{children}</pre>,
     // 引用样式
-    blockquote: ({ children }: any) => (
+    blockquote: ({ children }: MarkdownComponentProps) => (
       <blockquote className="border-l-4 border-cyan-500/50 pl-4 my-3 italic text-slate-300">
         {children}
       </blockquote>
     ),
     // 链接样式
-    a: ({ href, children }: any) => (
+    a: ({ href, children }: LinkProps) => (
       <a 
         href={href} 
         target="_blank" 
@@ -86,27 +100,27 @@ const AIMessage = ({
       </a>
     ),
     // 强调样式
-    strong: ({ children }: any) => <strong className="font-semibold text-slate-100">{children}</strong>,
-    em: ({ children }: any) => <em className="italic text-slate-200">{children}</em>,
+    strong: ({ children }: MarkdownComponentProps) => <strong className="font-semibold text-slate-100">{children}</strong>,
+    em: ({ children }: MarkdownComponentProps) => <em className="italic text-slate-200">{children}</em>,
     // 水平线
     hr: () => <hr className="my-4 border-slate-600" />,
     // 表格样式
-    table: ({ children }: any) => (
+    table: ({ children }: MarkdownComponentProps) => (
       <div className="overflow-x-auto my-3">
         <table className="min-w-full border-collapse border border-slate-600">
           {children}
         </table>
       </div>
     ),
-    thead: ({ children }: any) => <thead className="bg-slate-800/50">{children}</thead>,
-    tbody: ({ children }: any) => <tbody>{children}</tbody>,
-    tr: ({ children }: any) => <tr className="border-b border-slate-600">{children}</tr>,
-    th: ({ children }: any) => (
+    thead: ({ children }: MarkdownComponentProps) => <thead className="bg-slate-800/50">{children}</thead>,
+    tbody: ({ children }: MarkdownComponentProps) => <tbody>{children}</tbody>,
+    tr: ({ children }: MarkdownComponentProps) => <tr className="border-b border-slate-600">{children}</tr>,
+    th: ({ children }: MarkdownComponentProps) => (
       <th className="border border-slate-600 px-4 py-2 text-left font-semibold text-slate-100">
         {children}
       </th>
     ),
-    td: ({ children }: any) => (
+    td: ({ children }: MarkdownComponentProps) => (
       <td className="border border-slate-600 px-4 py-2 text-slate-200">
         {children}
       </td>
@@ -232,9 +246,15 @@ export default function AIChatSection() {
     try {
       const saved = localStorage.getItem('chatMessages');
       if (saved) {
-        const parsed = JSON.parse(saved);
+        const parsed = JSON.parse(saved) as Array<{
+          id: string;
+          content: string;
+          isAI: boolean;
+          timestamp: string;
+          isNew?: boolean;
+        }>;
         // 将时间戳字符串转换回 Date 对象，并标记为已存在的消息
-        return parsed.map((msg: any) => ({
+        return parsed.map((msg) => ({
           ...msg,
           timestamp: new Date(msg.timestamp),
           isNew: false // 从存储加载的消息都是已存在的，不需要打字机效果
@@ -288,7 +308,8 @@ export default function AIChatSection() {
       setMessages(loadedMessages);
       setIsMessagesLoaded(true);
     }
-  }, [isMessagesLoaded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMessagesLoaded]); // loadMessagesFromStorage 是稳定的函数，不需要作为依赖
 
   // 从保存的消息中恢复对话历史（排除初始消息）
   useEffect(() => {
@@ -305,7 +326,8 @@ export default function AIChatSection() {
     } else {
       conversationHistoryRef.current = [];
     }
-  }, [messages.length]); // 当消息数量变化时更新历史
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages.length]); // 只需要监听消息数量变化，不需要完整的 messages 数组
 
   // 当语言改变时，更新初始消息并清空对话历史
   useEffect(() => {
@@ -336,7 +358,8 @@ export default function AIChatSection() {
     }
     // 清空对话历史，因为系统提示词会改变
     conversationHistoryRef.current = [];
-  }, [texts.chat.initialMessage, language, isMessagesLoaded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [texts.chat.initialMessage, language, isMessagesLoaded]); // loadMessagesFromStorage 和 saveMessagesToStorage 是稳定的函数
 
   // 当消息更新时，保存到 localStorage（仅在消息加载完成后）
   useEffect(() => {
@@ -381,7 +404,8 @@ export default function AIChatSection() {
       scrollToBottom(true); // 立即滚动，不使用动画
     }, 150);
     return () => clearTimeout(timer);
-  }, [isMessagesLoaded, scrollToBottom]); // 当消息加载完成时执行
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMessagesLoaded]); // scrollToBottom 是 useCallback 包装的稳定函数
 
   // 处理滚轮事件，阻止在聊天区域滚动时触发页面切换
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {

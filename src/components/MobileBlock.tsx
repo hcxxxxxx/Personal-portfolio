@@ -10,7 +10,7 @@ const isMobileDevice = (): boolean => {
   if (typeof window === 'undefined') return false;
   
   // 检测用户代理
-  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+  const userAgent = navigator.userAgent || navigator.vendor || (window as Window & { opera?: string }).opera || '';
   const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
   
   // 检测屏幕宽度（小于 1024px 视为移动设备）
