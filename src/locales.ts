@@ -123,7 +123,7 @@ const zh: LocaleTexts = {
   },
   hero: {
     name: '洪成勋',
-    description: '复旦大学计算机科学专业学生，热衷于构建智能应用和开发者工具。目前在字节跳动实习，专注于 AI 驱动的代码生成和自动化。',
+    description: '复旦大学｜计算与智能创新学院｜计算机科学与技术\n',
   },
   contact: {
     title: '取得联系',
@@ -233,7 +233,7 @@ const en: LocaleTexts = {
   },
   hero: {
     name: 'Chengxun Hong',
-    description: 'Computer Science student at Fudan University with a passion for building intelligent applications and developer tools. Currently interning at ByteDance, focusing on AI-powered code generation and automation.',
+    description: 'Fudan University｜Computer Science and Technology',
   },
   contact: {
     title: 'Get In Touch',
