@@ -117,17 +117,20 @@ const zh: LocaleTexts = {
       description: '与我的 AI 聊天',
     },
     contact: {
-      name: '联系',
-      description: '取得联系',
+      name: 'AlgoRhythm',
+      description: '音游体验',
     },
   },
   hero: {
     name: '洪成勋',
-    description: '复旦大学｜计算与智能创新学院｜计算机科学与技术\n',
+    description: '复旦大学｜计算与智能创新学院｜计算机科学与技术\n\
+    复旦大学知识工场实验室\n\
+    复旦大学数据分析与安全实验室\n\
+    前字节跳动实习生｜AI应用研发工程师',
   },
   contact: {
-    title: '取得联系',
-    subtitle: '',
+    title: 'AlgoRhythm',
+    subtitle: '上传你喜欢的音乐，生成专属谱面！',
     connectWithMe: '与我联系',
     email: '邮箱',
     github: 'GitHub',
@@ -147,11 +150,11 @@ const zh: LocaleTexts = {
     },
   },
   chat: {
-    initialMessage: '你好！我是你的 AI 助手。你可以问我任何关于我的经历、技能、项目或兴趣的问题。今天我能为你做些什么？',
-    placeholder: '问我任何问题...',
+    initialMessage: '你好！我是洪成勋的 AI 助手。你可以问我任何关于洪成勋的经历、技能、项目或兴趣的问题。让我们开始吧～',
+    placeholder: '你可以向我询问关于洪成勋的问题...',
     disclaimer: 'AI 可能会犯错。请考虑检查重要信息。',
     responses: {
-      experience: '我在 TechCorp 担任软件工程师实习生，在 StartupX 担任前端开发实习生。我使用过 React、Node.js、TypeScript 等现代 Web 技术，以及 AWS 等云平台。我参与过 API 优化、响应式 UI 构建和自动化测试实施。',
+      experience: '',
       default: '这是一个有趣的问题！我很乐意讨论更多关于我的背景、项目或技术兴趣的内容。随时问我关于我的经历、技能、教育或任何其他你想知道的事情。',
     },
   },
@@ -162,29 +165,30 @@ const zh: LocaleTexts = {
       degree: '计算机科学与技术学士',
       date: '2022.09 - 2026.06',
       points: [
-        'GPA: 87/100',
-        '导师：肖仰华教授，知识工场实验室',
-        '核心课程：操作系统、编译原理、人工智能',
+        'GPA: 87/100 (3.42/4.00)，英语: 雅思-7.5，四级-621，六级-604',
+        '实验室：知识工场实验室(2025.5至今)，数据分析与安全实验室(2024.10-2025.4)',
+        '主修课程：数据结构、算法设计与分析、计算机组成与体系结构、操作系统、编译原理、人工智能等',
       ],
     },
     competition: {
       title: '奖项',
       name: '第九届上海图书馆开放数据竞赛',
-      award: '应用开发赛道 一等奖 & 人气奖',
-      project: '项目 "上海愿景"',
+      award: '应用开发赛道 优胜奖 & 人气奖',
+      project: '项目 "沪上展映"',
       points: [
-        '负责 UI 设计（Figma + AIGC）和前端开发（Vue）。',
-        '领导数据收集和预处理流程。',
+        '参赛作品：“沪上展映：大模型赋能申城旧建巡游”',
+        '负责 UI 设计（Figma + AIGC）和前端开发（Vue）',
+        '同时负责数据收集和预处理流程',
       ],
     },
     projectGerm: {
       title: 'GERM',
-      name: 'GERM: AI Agent for README Generation',
+      name: 'GERM: README自动生成Agent',
       date: '2025年2月 - 2025年4月',
       points: [
-        '开发了一个使用 LLM 和 AST 解析的智能体，从代码库自动生成结构化的 README。',
-        '构建了 Web UI 和 VSCode 扩展以增强开发者工作流程。',
-        '设计了内容评估系统以优化提示词和自定义模板。',
+        '开发了一个使用 LLM 和 AST 解析的智能体，从代码库自动生成结构化的 README',
+        '构建了 Web UI 和 VSCode 扩展以增强开发者工作流程',
+        '设计了内容评估系统以优化提示词和自定义模板',
       ],
     },
     projectPhi3: {
@@ -192,8 +196,8 @@ const zh: LocaleTexts = {
       name: 'Phi-3 Fine-Tuning with LORA',
       date: '2025年1月 - 2025年2月',
       points: [
-        '使用 LORA 对 Phi-3-Mini-4K-Instruct 模型进行微调，使用 Flash Attention 2 优化性能。',
-        '使用 Hugging Face Transformers 和 TRL 库实现了监督微调（SFT）。',
+        '使用 LORA 对 Phi-3-Mini-4K-Instruct 模型进行微调，使用 Flash Attention 2 优化性能',
+        '使用 Hugging Face Transformers 和 TRL 库实现了监督微调（SFT）',
       ],
     },
     internship: {
@@ -202,10 +206,10 @@ const zh: LocaleTexts = {
       role: '软件工程师实习生，AI 平台',
       date: '2025年6月 - 至今',
       points: [
-        '领导了将 HTML 设计和 OpenAPI 规范转换为像素级完美 React 代码的规则驱动架构。',
-        '为生成的应用程序实现了编译和运行时错误的自修复功能。',
-        '自动化了模拟数据到真实 OpenAPI 后端的迁移，并标准化了异步数据流管理。',
-        '主导了自动化测试工作流程，并为内部用户提供技术支持。',
+        '参与了将 HTML 设计和 OpenAPI 规范转换为像素级完美 React 代码的规则驱动架构',
+        '为生成的应用程序实现了编译和运行时错误的自修复功能',
+        '自动化模拟数据到真实 OpenAPI 后端的迁移，并标准化了异步数据流管理',
+        '主导了自动化测试工作流程，并为内部用户提供技术支持',
       ],
     },
   },
@@ -227,17 +231,20 @@ const en: LocaleTexts = {
       description: 'Chat with my AI',
     },
     contact: {
-      name: 'Contact',
-      description: 'Get in touch',
+      name: 'AlgoRhythm',
+      description: 'Play music game',
     },
   },
   hero: {
     name: 'Chengxun Hong',
-    description: 'Fudan University｜Computer Science and Technology',
+    description: 'Fudan University｜Computer Science and Technology\n\
+    Knowledge Works Research Laboratory @ Fudan University\n\
+    DASLab @ Fudan University\n\
+    ByteDance｜AI Application Developer',
   },
   contact: {
-    title: 'Get In Touch',
-    subtitle: '',
+    title: 'AlgoRhythm',
+    subtitle: 'Upload your favorite music and generate a custom chart!',
     connectWithMe: 'Connect With Me',
     email: 'Email',
     github: 'GitHub',
@@ -258,10 +265,10 @@ const en: LocaleTexts = {
   },
   chat: {
     initialMessage: 'Hello! I\'m your AI assistant. You can ask me anything about my experience, skills, projects, or interests. How can I help you today?',
-    placeholder: 'Ask me anything...',
+    placeholder: 'Ask me anything about Chengxun...',
     disclaimer: 'AI can make mistakes. Consider checking important information.',
     responses: {
-      experience: 'I have experience as a Software Engineer Intern at TechCorp and Frontend Developer Intern at StartupX. I\'ve worked with modern web technologies like React, Node.js, TypeScript, and cloud platforms like AWS. I\'ve contributed to optimizing APIs, building responsive UIs, and implementing automated testing.',
+      experience: '',
       default: 'That\'s an interesting question! I\'d be happy to discuss more about my background, projects, or technical interests. Feel free to ask me about my experience, skills, education, or anything else you\'d like to know.',
     },
   },

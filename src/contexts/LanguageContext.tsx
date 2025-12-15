@@ -18,7 +18,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // 客户端挂载后，从 localStorage 读取保存的语言设置
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('language') as Language;
+      const saved = localStorage.getItem('portfolio_language') as Language;
       if (saved === 'zh' || saved === 'en') {
         setLanguageState(saved);
       }
@@ -29,7 +29,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('language', lang);
+      localStorage.setItem('portfolio_language', lang);
     }
   };
 

@@ -4,11 +4,13 @@
 
 `personalInfo.ts` 文件用于将你的个人信息格式化为 AI 友好的格式，以便 AI 助手能够准确回答关于你的问题。
 
+**所有个人信息都直接硬编码在 `formatPersonalInfoForAI` 方法中，便于集中修改。**
+
 ## 数据结构
 
 个人信息库包含以下主要部分：
 
-### 1. 基本信息 (basic)
+### 1. 基本信息 (basicInfo)
 - 姓名（中英文）
 - 个人简介（中英文）
 
@@ -20,7 +22,7 @@
 - 导师信息
 - 核心课程列表
 
-### 3. 工作经历 (experience)
+### 3. 工作经历 (internship)
 - 实习/工作公司
 - 职位
 - 时间范围
@@ -45,25 +47,53 @@
 
 ## 如何更新个人信息
 
-### 方法 1：通过 locales.ts 自动生成（推荐）
+### 直接修改 formatPersonalInfoForAI 方法
 
-个人信息库会自动从 `locales.ts` 文件中提取信息。要更新个人信息：
+所有个人信息都硬编码在 `formatPersonalInfoForAI` 方法中，位于 `src/data/personalInfo.ts` 文件。
 
-1. 编辑 `src/locales.ts` 文件
-2. 更新对应语言（中文 `zh` 或英文 `en`）的 `experience` 部分
-3. 个人信息库会自动同步更新
+**修改步骤：**
 
-### 方法 2：直接修改 personalInfo.ts
+1. 打开 `src/data/personalInfo.ts` 文件
+2. 找到 `formatPersonalInfoForAI` 方法
+3. 在方法开头的 `========== 个人信息配置区域 ==========` 标记处修改个人信息
+4. 所有信息都分为中英文两部分，分别修改即可
 
-如果需要添加 `locales.ts` 中没有的信息（如技能列表），可以直接编辑 `getPersonalInfo` 函数中的 `skills` 部分：
+**示例：修改基本信息：**
 
 ```typescript
-skills: {
-  languages: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C++'],
-  frameworks: ['React', 'Next.js', 'Vue', 'Node.js'],
-  tools: ['Figma', 'Git', 'VSCode', 'Hugging Face', 'Transformers'],
-  platforms: ['AWS', 'OpenAPI', 'VSCode Extension'],
-},
+// 基本信息
+const basicInfo = {
+  zh: {
+    name: '你的中文名',
+    description: '你的中文简介'
+  },
+  en: {
+    name: 'Your English Name',
+    description: 'Your English Description'
+  }
+};
+```
+
+**示例：添加新项目：**
+
+```typescript
+// 项目经历
+const projects = {
+  zh: [
+    {
+      name: '项目名称',
+      date: '2024年1月 - 2024年3月',
+      description: [
+        '项目描述1',
+        '项目描述2'
+      ]
+    },
+    // ... 添加更多项目
+  ],
+  en: [
+    // 对应的英文版本
+  ]
+};
 ```
 
 ## 系统提示词格式

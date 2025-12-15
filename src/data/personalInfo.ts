@@ -1,134 +1,174 @@
 // 个人信息库 - 用于 AI 助手理解个人信息
 // 这个文件包含了结构化的个人信息，便于 AI 读取和理解
-
-import { LocaleTexts } from '@/locales';
-
-// 个人信息接口定义
-export interface PersonalInfo {
-  basic: {
-    name: {
-      zh: string;
-      en: string;
-    };
-    description: {
-      zh: string;
-      en: string;
-    };
-  };
-  education: {
-    school: string;
-    degree: string;
-    date: string;
-    gpa: string;
-    advisor: string;
-    coreCourses: string[];
-  };
-  experience: {
-    internship: {
-      company: string;
-      role: string;
-      date: string;
-      responsibilities: string[];
-    };
-  };
-  projects: Array<{
-    name: string;
-    date: string;
-    description: string[];
-  }>;
-  awards: Array<{
-    name: string;
-    award: string;
-    project: string;
-    contributions: string[];
-  }>;
-  skills: {
-    languages: string[];
-    frameworks: string[];
-    tools: string[];
-    platforms: string[];
-  };
-}
-
-// 从 locales 数据生成个人信息库
-export const getPersonalInfo = (texts: LocaleTexts): PersonalInfo => {
-  return {
-    basic: {
-      name: {
-        zh: texts.hero.name,
-        en: texts.hero.name === '洪成勋' ? 'Chengxun Hong' : texts.hero.name,
-      },
-      description: {
-        zh: texts.hero.description,
-        en: texts.hero.description,
-      },
-    },
-    education: {
-      school: texts.experience.education.school,
-      degree: texts.experience.education.degree,
-      date: texts.experience.education.date,
-      gpa: texts.experience.education.points.find(p => p.includes('GPA') || p.includes('gpa')) || '',
-      advisor: texts.experience.education.points.find(p => p.includes('导师') || p.includes('Advisor') || p.includes('advisor')) || '',
-      coreCourses: (() => {
-        const coursesPoint = texts.experience.education.points.find(p => 
-          p.includes('课程') || p.includes('Courses') || p.includes('courses')
-        );
-        if (!coursesPoint) return [];
-        // 提取课程名称（冒号或中文冒号后的内容）
-        const coursesText = coursesPoint.split(/[：:]/)[1]?.trim() || '';
-        // 支持中文顿号、英文逗号、中文逗号作为分隔符
-        return coursesText.split(/[、,，]/).map(s => s.trim()).filter(s => s.length > 0);
-      })(),
-    },
-    experience: {
-      internship: {
-        company: texts.experience.internship.company,
-        role: texts.experience.internship.role,
-        date: texts.experience.internship.date,
-        responsibilities: texts.experience.internship.points,
-      },
-    },
-    projects: [
-      {
-        name: texts.experience.projectGerm.name,
-        date: texts.experience.projectGerm.date,
-        description: texts.experience.projectGerm.points,
-      },
-      {
-        name: texts.experience.projectPhi3.name,
-        date: texts.experience.projectPhi3.date,
-        description: texts.experience.projectPhi3.points,
-      },
-    ],
-    awards: [
-      {
-        name: texts.experience.competition.name,
-        award: texts.experience.competition.award,
-        project: texts.experience.competition.project,
-        contributions: texts.experience.competition.points,
-      },
-    ],
-    skills: {
-      languages: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C++'],
-      frameworks: ['React', 'Next.js', 'Vue', 'Node.js'],
-      tools: ['Figma', 'Git', 'VSCode', 'Hugging Face', 'Transformers'],
-      platforms: ['AWS', 'OpenAPI', 'VSCode Extension'],
-    },
-  };
-};
+// 所有个人信息都直接硬编码在此文件中，便于集中修改
 
 // 将个人信息格式化为 AI 友好的系统提示词
-export const formatPersonalInfoForAI = (info: PersonalInfo, language: 'zh' | 'en'): string => {
-  const lang = language === 'zh' ? 'zh' : 'en';
-  const name = info.basic.name[lang];
-  const description = info.basic.description[lang];
+// 所有个人信息都直接硬编码在此方法中，便于集中修改
+export const formatPersonalInfoForAI = (language: 'zh' | 'en'): string => {
+  // ========== 个人信息配置区域 - 请在此处修改个人信息 ==========
+  
+  // 基本信息
+  const basicInfo = {
+    zh: {
+      name: '洪成勋',
+      description: '复旦大学｜计算与智能创新学院｜计算机科学与技术'
+    },
+    en: {
+      name: 'Chengxun Hong',
+      description: 'Fudan University｜Computer Science and Technology'
+    }
+  };
 
+  // 教育背景
+  const education = {
+    zh: {
+      school: '复旦大学',
+      degree: '计算机科学与技术学士',
+      date: '2022.09 - 2026.06',
+      gpa: 'GPA: 87/100',
+      advisor: '导师：肖仰华教授，知识工场实验室',
+      coreCourses: ['操作系统', '编译原理', '人工智能']
+    },
+    en: {
+      school: 'Fudan University',
+      degree: 'B.S. in Computer Science and Technology',
+      date: '2022.09 - 2026.06',
+      gpa: 'GPA: 87/100',
+      advisor: 'Advisor: Prof. Yanghua Xiao, Knowledge Works Laboratory',
+      coreCourses: ['Operating Systems', 'Compiler Principles', 'Artificial Intelligence']
+    }
+  };
+
+  // 工作经历
+  const internship = {
+    zh: {
+      company: '字节跳动',
+      role: '软件工程师实习生，AI 平台',
+      date: '2025年6月 - 至今',
+      responsibilities: [
+        '领导了将 HTML 设计和 OpenAPI 规范转换为像素级完美 React 代码的规则驱动架构。',
+        '为生成的应用程序实现了编译和运行时错误的自修复功能。',
+        '自动化了模拟数据到真实 OpenAPI 后端的迁移，并标准化了异步数据流管理。',
+        '主导了自动化测试工作流程，并为内部用户提供技术支持。'
+      ]
+    },
+    en: {
+      company: 'ByteDance',
+      role: 'Software Engineer Intern, AI Platform',
+      date: 'June 2025 - Present',
+      responsibilities: [
+        'Led rule-driven architecture for converting HTML designs & OpenAPI specs into pixel-perfect React code.',
+        'Implemented self-repair capabilities for compilation and runtime errors in the generated applications.',
+        'Automated migration of mock data to real OpenAPI backends and standardized async data stream management.',
+        'Spearheaded automated testing workflows and provided technical support for internal users.'
+      ]
+    }
+  };
+
+  // 项目经历
+  const projects = {
+    zh: [
+      {
+        name: 'GERM: AI Agent for README Generation',
+        date: '2025年2月 - 2025年4月',
+        description: [
+          '开发了一个使用 LLM 和 AST 解析的智能体，从代码库自动生成结构化的 README。',
+          '构建了 Web UI 和 VSCode 扩展以增强开发者工作流程。',
+          '设计了内容评估系统以优化提示词和自定义模板。'
+        ]
+      },
+      {
+        name: 'Phi-3 Fine-Tuning with LORA',
+        date: '2025年1月 - 2025年2月',
+        description: [
+          '使用 LORA 对 Phi-3-Mini-4K-Instruct 模型进行微调，使用 Flash Attention 2 优化性能。',
+          '使用 Hugging Face Transformers 和 TRL 库实现了监督微调（SFT）。'
+        ]
+      }
+    ],
+    en: [
+      {
+        name: 'GERM: AI Agent for README Generation',
+        date: 'Feb 2025 - Apr 2025',
+        description: [
+          'Developed an agent using LLMs and AST parsing to auto-generate structured READMEs from codebases.',
+          'Built a Web UI and a VSCode extension to enhance developer workflow.',
+          'Designed a content evaluation system to optimize prompts and customize templates.'
+        ]
+      },
+      {
+        name: 'Phi-3 Fine-Tuning with LORA',
+        date: 'Jan 2025 - Feb 2025',
+        description: [
+          'Fine-tuned the Phi-3-Mini-4K-Instruct model using LORA, optimizing performance with Flash Attention 2.',
+          'Implemented Supervised Fine-Tuning (SFT) with Hugging Face Transformers and TRL libraries.'
+        ]
+      }
+    ]
+  };
+
+  // 获奖经历
+  const awards = {
+    zh: [
+      {
+        name: '第九届上海图书馆开放数据竞赛',
+        award: '应用开发赛道 一等奖 & 人气奖',
+        project: '项目 "沪上展映"',
+        contributions: [
+          '负责 UI 设计（Figma + AIGC）和前端开发（Vue）。',
+          '领导数据收集和预处理流程。'
+        ]
+      }
+    ],
+    en: [
+      {
+        name: '9th Shanghai Library Open Data Competition',
+        award: 'Winner & Popularity Award, Application Development Track',
+        project: 'Project "Shanghai Vision"',
+        contributions: [
+          'Responsible for UI design (Figma + AIGC) and front-end development (Vue).',
+          'Led the data collection and preprocessing pipeline.'
+        ]
+      }
+    ]
+  };
+
+  // 技能
+  const skills = {
+    languages: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C++'],
+    frameworks: ['React', 'Next.js', 'Vue', 'Node.js'],
+    tools: ['Figma', 'Git', 'VSCode', 'Hugging Face', 'Transformers'],
+    platforms: ['AWS', 'OpenAPI', 'VSCode Extension']
+  };
+
+  // ========== 个人信息配置区域结束 ==========
+
+  // 根据语言选择对应的信息
+  const info = language === 'zh' 
+    ? {
+        basic: basicInfo.zh,
+        education: education.zh,
+        internship: internship.zh,
+        projects: projects.zh,
+        awards: awards.zh,
+        skills
+      }
+    : {
+        basic: basicInfo.en,
+        education: education.en,
+        internship: internship.en,
+        projects: projects.en,
+        awards: awards.en,
+        skills
+      };
+
+  // 生成系统提示词
   const systemPrompt = language === 'zh' 
-    ? `你是一个专业的 AI 助手，专门回答关于 ${name} 的个人信息问题。
+    ? `你是一个专业的 AI 助手，专门回答关于 ${info.basic.name} 的个人信息问题。
 
 ## 基本信息
-- 姓名：${name}
-- 简介：${description}
+- 姓名：${info.basic.name}
+- 简介：${info.basic.description}
 
 ## 教育背景
 - 学校：${info.education.school}
@@ -140,11 +180,11 @@ export const formatPersonalInfoForAI = (info: PersonalInfo, language: 'zh' | 'en
 
 ## 工作经历
 ### 实习经历
-- 公司：${info.experience.internship.company}
-- 职位：${info.experience.internship.role}
-- 时间：${info.experience.internship.date}
+- 公司：${info.internship.company}
+- 职位：${info.internship.role}
+- 时间：${info.internship.date}
 - 主要职责：
-${info.experience.internship.responsibilities.map(r => `  - ${r}`).join('\n')}
+${info.internship.responsibilities.map(r => `  - ${r}`).join('\n')}
 
 ## 项目经历
 ${info.projects.map(project => `
@@ -175,11 +215,11 @@ ${award.contributions.map(c => `  - ${c}`).join('\n')}
 3. 如果问题超出以上信息范围，礼貌地说明你只了解上述信息
 4. 使用中文回答
 5. 回答要简洁明了，重点突出`
-    : `You are a professional AI assistant specialized in answering questions about ${name}'s personal information.
+    : `You are a professional AI assistant specialized in answering questions about ${info.basic.name}'s personal information.
 
 ## Basic Information
-- Name: ${name}
-- Description: ${description}
+- Name: ${info.basic.name}
+- Description: ${info.basic.description}
 
 ## Education
 - School: ${info.education.school}
@@ -191,11 +231,11 @@ ${award.contributions.map(c => `  - ${c}`).join('\n')}
 
 ## Work Experience
 ### Internship
-- Company: ${info.experience.internship.company}
-- Role: ${info.experience.internship.role}
-- Date: ${info.experience.internship.date}
+- Company: ${info.internship.company}
+- Role: ${info.internship.role}
+- Date: ${info.internship.date}
 - Key Responsibilities:
-${info.experience.internship.responsibilities.map(r => `  - ${r}`).join('\n')}
+${info.internship.responsibilities.map(r => `  - ${r}`).join('\n')}
 
 ## Projects
 ${info.projects.map(project => `

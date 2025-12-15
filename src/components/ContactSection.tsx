@@ -191,7 +191,7 @@ const ContactSection = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      className="w-full px-5 py-4 rounded-xl bg-slate-800/60 border border-slate-600 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none transition-all duration-300 placeholder:text-slate-500 group-hover:border-slate-500"
+                      className="w-full px-5 py-4 rounded-xl bg-slate-800/60 border border-slate-600 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(56,189,248,0.3)] focus:outline-none transition-all duration-300 placeholder:text-slate-500 group-hover:border-slate-500"
                       style={{ paddingLeft: '1.25rem' }}
                     />
                     <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-sky-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"></div>
@@ -208,7 +208,7 @@ const ContactSection = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full px-5 py-4 rounded-xl bg-slate-800/60 border border-slate-600 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none transition-all duration-300 placeholder:text-slate-500 group-hover:border-slate-500"
+                      className="w-full px-5 py-4 rounded-xl bg-slate-800/60 border border-slate-600 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(56,189,248,0.3)] focus:outline-none transition-all duration-300 placeholder:text-slate-500 group-hover:border-slate-500"
                       style={{ paddingLeft: '1.25rem' }}
                     />
                     <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-sky-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"></div>
@@ -227,7 +227,7 @@ const ContactSection = () => {
                     onChange={(e) => setMessage(e.target.value)}
                     required
                     rows={8}
-                    className="w-full px-5 py-4 rounded-xl bg-slate-800/60 border border-slate-600 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none transition-all duration-300 resize-none placeholder:text-slate-500 group-hover:border-slate-500"
+                    className="w-full px-5 py-4 rounded-xl bg-slate-800/60 border border-slate-600 focus:border-sky-400 focus:shadow-[0_0_15px_rgba(56,189,248,0.3)] focus:outline-none transition-all duration-300 resize-none placeholder:text-slate-500 group-hover:border-slate-500"
                     style={{ paddingLeft: '1.25rem', paddingTop: '1rem' }}
                   />
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-sky-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"></div>

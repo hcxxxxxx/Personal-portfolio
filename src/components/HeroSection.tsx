@@ -420,7 +420,7 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
         </div>
         {/* 副标题：个人简介 - 固定高度容器 */}
         <div className="h-32 md:h-40 mb-8 max-w-2xl">
-          <p className="text-lg md:text-xl text-slate-300">
+          <p className="text-lg md:text-xl text-slate-300 whitespace-pre-line">
             {descText}
             {isDescTyping && (
               <span className="inline-block w-1 h-5 md:h-6 bg-sky-400 ml-1 animate-pulse"></span>
@@ -727,6 +727,13 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                         ease: 'easeInOut',
                       }
                     }}
+                    whileHover={{ 
+                      scale: 1.15, 
+                      zIndex: 50,
+                      opacity: 1,
+                      filter: "brightness(1.1)",
+                      transition: { duration: 0.2, ease: "easeOut" }
+                    }}
                     exit={{
                       opacity: 0,
                       scale: 0,
@@ -736,7 +743,7 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                         ease: 'easeInOut',
                       },
                     }}
-                    className="absolute pointer-events-none"
+                    className="absolute pointer-events-auto cursor-pointer"
                     style={{
                       left: `${circle.x - size / 2}px`,
                       top: `${circle.y}px`,
@@ -744,12 +751,13 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                       height: `${size}px`,
                     }}
                   >
-                    <div className="relative w-full h-full">
+                    <div className="relative w-full h-full group">
+                      <div className="absolute inset-0 rounded-full bg-sky-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <Image
                         src={circle.imageSrc}
                         alt=""
                         fill
-                        className="rounded-full object-cover border-4 border-slate-800 shadow-2xl"
+                        className="rounded-full object-cover border-4 border-slate-800 shadow-2xl transition-all duration-300 group-hover:border-sky-400/50"
                         loading="lazy"
                         sizes={`${size}px`}
                         quality={75}

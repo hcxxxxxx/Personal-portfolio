@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Send, User, Bot } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTypewriter } from '@/hooks/useTypewriter';
-import { getPersonalInfo, formatPersonalInfoForAI } from '@/data/personalInfo';
+import { formatPersonalInfoForAI } from '@/data/personalInfo';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -456,9 +456,8 @@ export default function AIChatSection() {
   // 调用 OpenAI API 获取 AI 回复
   const getAIResponse = async (userMessage: string): Promise<string> => {
     try {
-      // 获取个人信息库并格式化为系统提示词
-      const personalInfo = getPersonalInfo(texts);
-      const systemPrompt = formatPersonalInfoForAI(personalInfo, language);
+      // 获取个人信息并格式化为系统提示词（个人信息直接硬编码在 formatPersonalInfoForAI 中）
+      const systemPrompt = formatPersonalInfoForAI(language);
 
       // 构建消息历史（包含系统提示词）
       const messagesForAPI = [
@@ -666,17 +665,17 @@ export default function AIChatSection() {
           {/* 外层发光效果 */}
           <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
           {/* 科技感输入框容器 */}
-          <div className="relative bg-slate-900/60 backdrop-blur-md rounded-2xl overflow-hidden border border-slate-700/50 focus-within:border-cyan-500/50 focus-within:shadow-[0_0_25px_rgba(56,189,248,0.2)] transition-all duration-300">
+          <div className="relative bg-slate-900/60 backdrop-blur-md rounded-2xl overflow-hidden border border-slate-700/50 focus-within:border-sky-500/50 focus-within:shadow-[0_0_25px_rgba(56,189,248,0.2)] transition-all duration-300">
             {/* 顶部科技感线条 */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sky-400/50 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
             {/* 左侧装饰线条 */}
-            <div className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-cyan-400/20 via-blue-500/20 to-transparent rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-sky-400/30 via-blue-500/30 to-transparent rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
             <textarea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder={texts.chat.placeholder}
-              className="w-full bg-transparent py-4 text-slate-200 placeholder:text-slate-500/60 focus:outline-none resize-none scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent relative z-10"
+              className="w-full bg-transparent py-4 text-slate-200 placeholder:text-slate-500/60 focus:outline-none resize-none scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent relative z-10 font-sans"
               rows={1}
               style={{ 
                 minHeight: '56px',
@@ -691,23 +690,14 @@ export default function AIChatSection() {
             <button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isTyping}
-              style={{
-                position: 'absolute',
-                right: '16px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '44px',
-                height: '44px',
-                zIndex: 20
-              }}
-              className="rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-cyan-500/30 relative group/btn"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 z-20 group/btn overflow-hidden"
             >
               {/* 按钮内部发光效果 */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
               <Send size={18} className="text-white relative z-10" strokeWidth={2.5} />
             </button>
             {/* 底部发光线条 */}
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-sky-400/50 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
           </div>
         </div>
         <p className="text-center text-xs text-slate-500/70 mt-3">

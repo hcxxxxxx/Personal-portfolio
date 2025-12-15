@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { User, Briefcase, MessageCircle, Mail } from 'lucide-react';
+import { User, Briefcase, MessageCircle, Gamepad2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTypewriter } from '@/hooks/useTypewriter';
 
@@ -42,7 +42,7 @@ export default function SideNav({ activeView, onNavigate }: SideNavProps) {
     { id: 'hero' as View, name: texts.nav.hero.name, description: texts.nav.hero.description, icon: User },
     { id: 'experience' as View, name: texts.nav.experience.name, description: texts.nav.experience.description, icon: Briefcase },
     { id: 'chat' as View, name: texts.nav.chat.name, description: texts.nav.chat.description, icon: MessageCircle },
-    { id: 'contact' as View, name: texts.nav.contact.name, description: texts.nav.contact.description, icon: Mail },
+    { id: 'contact' as View, name: texts.nav.contact.name, description: texts.nav.contact.description, icon: Gamepad2 },
   ];
   
   // 状态，用于跟踪当前鼠标悬停在哪个部分上
@@ -55,10 +55,10 @@ export default function SideNav({ activeView, onNavigate }: SideNavProps) {
 
   return (
     // 导航栏容器，固定在屏幕左侧中间，仅在 md 及以上屏幕尺寸显示
-    <nav className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
+    <nav className="fixed left-6 top-1/2 transform -translate-y-1/2 z-50 hidden md:block">
       {/* 玻璃质感的卡片作为导航背景 */}
-      <div className="relative glass-card p-3 backdrop-blur-lg border border-white/10 shadow-lg">
-        <ul className="flex flex-col items-center space-y-4">
+      <div className="relative glass-card px-3 py-6 rounded-full backdrop-blur-xl border border-white/5 shadow-2xl flex flex-col items-center gap-6">
+        <ul className="flex flex-col items-center space-y-6">
           {/* 遍历所有部分，创建导航按钮 */}
           {sections.map((section, index) => {
             const isActive = activeView === section.id;

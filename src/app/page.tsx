@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import HeroSection from '@/components/HeroSection';
 import InteractiveExperience from '@/components/InteractiveExperience';
 import AIChatSection from '@/components/AIChatSection';
-import ContactSection from '@/components/ContactSection';
+import AlgoRhythmSection from '@/components/AlgoRhythmSection';
 import SideNav from '@/components/SideNav';
 
 // 定义视图类型的联合类型，用于表示当前显示的页面部分
@@ -31,7 +31,7 @@ export default function Home() {
     { id: 'hero' as View, component: <HeroSection />, index: 0 },
     { id: 'experience' as View, component: <InteractiveExperience />, index: 1 },
     { id: 'chat' as View, component: <div className="w-full h-full flex items-center justify-center"><AIChatSection /></div>, index: 2 },
-    { id: 'contact' as View, component: <div className="w-full h-full flex items-center justify-center"><ContactSection /></div>, index: 3 },
+    { id: 'contact' as View, component: <div className="w-full h-full flex items-center justify-center"><AlgoRhythmSection /></div>, index: 3 },
   ], []);
 
   // useEffect 用于处理鼠标滚轮事件，实现页面内容的滚动切换
