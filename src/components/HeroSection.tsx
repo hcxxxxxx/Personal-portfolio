@@ -18,55 +18,6 @@ interface HeroSectionProps {
   custom?: CustomAnimationProps;
 }
 
-// 中心头像的动画变体，用于实现丝滑的神奇移动过渡
-const profileImageVariants: Variants = {
-  initial: (custom?: CustomAnimationProps) => {
-    // 从 experience 返回时，添加轻微的缩放和透明度变化，让过渡更丝滑
-    if (custom?.prev === 'experience' && custom?.next === 'hero') {
-      return {
-        opacity: 0.7, // 稍微透明，然后淡入（会与水平透明渐变相乘）
-        scale: 0.95, // 稍微缩小，然后放大到正常
-      };
-    }
-    // 初次加载时
-    return {
-      opacity: 1,
-      scale: 1,
-    };
-  },
-  animate: (custom?: CustomAnimationProps) => {
-    // 从 experience 返回时，使用更平滑的过渡
-    if (custom?.prev === 'experience' && custom?.next === 'hero') {
-      return {
-        opacity: 1, // 最终完全不透明（会与水平透明渐变相乘）
-        scale: 1,
-        transition: { 
-          duration: 0.7, 
-          ease: [0.4, 0, 0.2, 1], // 使用与 layoutId 相同的缓动函数
-          opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }, // 透明度变化稍快
-          scale: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } // 缩放与位置同步
-        }
-      };
-    }
-    return {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
-    };
-  },
-  exit: (custom?: CustomAnimationProps) => {
-    // 跳转到 experience 时，保持可见，让 layoutId 处理位置变化
-    if (custom?.next === 'experience') {
-      return {
-        opacity: 1,
-        scale: 1,
-        transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
-      };
-    }
-    return {};
-  }
-};
-
 // “英雄”部分，即网站的初始欢迎页面
 const HeroSection = ({ custom }: HeroSectionProps) => {
   const { texts } = useLanguage();
@@ -600,7 +551,7 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
                     transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
                   };
                 },
-                exit: (custom?: CustomAnimationProps) => {
+                exit: () => {
                   // exit 在组件离开时触发，对于 layoutId 动画，透明度过渡在 animate 中处理
                   return {};
                 }

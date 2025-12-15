@@ -393,7 +393,7 @@ export default function AIChatSection() {
     requestAnimationFrame(() => {
       scrollToBottom();
     });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, scrollToBottom]);
 
   // 组件首次加载或消息加载完成后，滚动到底部
   useEffect(() => {

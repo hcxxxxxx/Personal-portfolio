@@ -1,12 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTypewriter } from '@/hooks/useTypewriter';
 import { Construction, Hammer, Wrench, Code2 } from 'lucide-react';
 
 const AlgoRhythmSection = () => {
-  const { texts, language } = useLanguage();
+  const { language } = useLanguage();
   
   // Custom text for development state
   const devTitle = "AlgoRhythm";
@@ -38,13 +38,13 @@ const AlgoRhythmSection = () => {
     }
   };
 
-  const floatingIconVariants = {
+  const floatingIconVariants: Variants = {
     animate: {
       y: [0, -15, 0],
       rotate: [0, 5, -5, 0],
       transition: {
         duration: 4,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
         repeat: Infinity,
       }
     }
