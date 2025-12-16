@@ -78,7 +78,7 @@ export interface LocaleTexts {
     research: ModuleContent;
     projects: ModuleContent;
     competitions: ModuleContent;
-    about: ModuleContent;
+    hobbies: ModuleContent;
   };
 }
 
@@ -140,83 +140,113 @@ const zh: LocaleTexts = {
     sectionTitle: '个人简历',
     education: {
       title: '教育经历',
-      subtitle: '学术背景',
+      subtitle: '',
       content: `# 复旦大学
 计算机科学与技术｜本科｜2022年9月-2026年6月
 ---
+
 ### 学业信息
-绩点: 87/100(3.42/4.00)
-导师: 肖仰华老师
-实验室: 知识工场实验室
+**·** 绩点: 87/100(3.42/4.00)
+**·** 导师: 肖仰华老师
+**·** 实验室: 知识工场实验室
 
 ### 英语成绩
-IELTS: 7.5｜CET-4: 621｜CET-6: 604
+**·** IELTS: 7.5｜CET-4: 621｜CET-6: 604
+
+# 香港中文大学(深圳)
+计算机科学｜研究型硕士｜待入学
+---
+
+### 导师
+**·** 武执政教授(数据科学学院)
+**·** 金平院长(音乐学院，联培)
+
+### 研究方向
+**·** AI+音乐
 `,
     },
     internship: {
       title: '实习经历',
-      subtitle: '工作经验',
+      subtitle: '',
       content: `# 字节跳动
 AI应用研发工程师｜2025年6月-2025年10月
 ---
+
 ### AI应用生成平台提示词工程
-设计并实现规则驱动的提示词架构，用于指导基于LLM的原生、像素级、高可维护性"HTML设计稿+OpenAPI规范→React Web/Native代码"转换，以及编译/运行报错的自我修复功能，编译通过率由65.2%提升至89.0%
+**·** 设计并实现规则驱动的提示词架构，用于指导基于LLM的原生、像素级、高可维护性"HTML设计稿+OpenAPI规范→React Web/Native代码"转换，以及编译/运行报错的自我修复功能，编译通过率由65.2%提升至89.0%
+
 ### API集成与全链路数据精修
-负责从Draft-mocked数据到真实OpenAPI后端服务的自动化全面迁移与集成，以及异步数据流的标准化管理
+**·** 负责从Draft-mocked数据到真实OpenAPI后端服务的自动化全面迁移与集成，以及异步数据流的标准化管理
+
 ### 自动化测试
-设计并实现面向生成应用的自动化测试流程，日调试项目180+，负责Expo SDK兼容性维护与依赖库版本管理，同时负责内场运维和内测用户Oncall`,
+**·** 设计并实现面向生成应用的自动化测试流程，日调试项目180+，负责Expo SDK兼容性维护与依赖库版本管理，同时负责内场运维和内测用户Oncall`,
     },
     research: {
       title: '科研经历',
-      subtitle: '学术研究',
+      subtitle: '',
       content: `# 复旦大学知识工场实验室
 科研助手｜2025年5月至今
 ---
+
 ### 多智能体系统(MAS)自主协作优化
-调研并汇总主流单/多Agent系统在*BrowseComp*、*HLE*等模型能力评估基准测试数据集上的准确率分数，分析多Agent检索实验反常现象及原因
+**·** 调研并汇总主流单/多Agent系统在*BrowseComp*、*HLE*等模型能力评估基准测试数据集上的准确率分数，分析多Agent检索实验反常现象及原因
 
 # 复旦大学数据分析与安全实验室
 科研助手｜2024年10月-2025年4月
 ---
+
 ### 纵向隐私保护机器学习的数据对齐
-收集纵向分布数据集，做效率对比实验，整理实验数据并绘制图表，负责论文的语意和符号一致性、协议正确性的检查与修改(TIFS在投)`,
+**·** 收集纵向分布数据集，做效率对比实验，整理实验数据并绘制图表，负责论文的语意和符号一致性、协议正确性的检查与修改(TIFS在投)`,
     },
     projects: {
       title: '项目经历',
-      subtitle: '技术项目',
+      subtitle: '',
       content: `# GeRM: README文档自动生成Agent
 个人项目｜2025年2月-2025年4月
 ---
-利用LLM+AST解析代码仓库，结合规范化提示词生成结构化、清晰的README文档
-支持Web UI交互，并扩展为VSCode插件集成至IDE，提升开发效率和用户体验
-创建生成内容评估机制，优化提示词与客制化模板
+
+**·** 利用LLM+AST解析代码仓库，结合规范化提示词生成结构化、清晰的README文档
+**·** 支持Web UI交互，并扩展为VSCode插件集成至IDE，提升开发效率和用户体验
+**·** 创建生成内容评估机制，优化提示词与客制化模板
 
 # AlgoRhythm: 谱面关卡客制化音游
 个人项目｜2024年10月-2024年12月
 ---
-基于Librosa音频分析技术，多维度解析用户输入音频，实现音频到音游谱面的智能映射
-采用Web Audio API处理音频播放和同步，CSS3+JavaScript实现高性能渲染与实时反馈`,
+
+**·** 基于Librosa音频分析技术，多维度解析用户输入音频，实现音频到音游谱面的智能映射
+**·** 采用Web Audio API处理音频播放和同步，CSS3+JavaScript实现高性能渲染与实时反馈`,
     },
     competitions: {
       title: '比赛经历',
-      subtitle: '竞赛获奖',
+      subtitle: '',
       content: `# 沪上展映：大模型赋能申城旧建巡游
 竞赛获奖｜2024年6月-2024年10月
 ---
-### 职责
-负责UI设计(Figma+AIGC)与前端开发(Vue框架)，主导数据采集与预处理流程
-### 获奖情况
-项目获第9届上海图书馆开放数据竞赛-应用开发类赛道优胜奖与人气奖`,
-    },
-    about: {
-      title: '联系方式',
-      subtitle: '基本信息',
-      content: `# 洪成勋
 
-(+86) 181-9097-1811
-22300240021@m.fudan.edu.cn
-微信：luckinhcx
-github.com/hcxxxxxx`,
+### 职责
+**·** 负责UI设计(Figma+AIGC)与前端开发(Vue框架)，主导数据采集与预处理流程
+
+### 获奖情况
+**·** 项目获第9届上海图书馆开放数据竞赛-应用开发类赛道优胜奖与人气奖`,
+    },
+    hobbies: {
+      title: '兴趣爱好',
+      subtitle: '',
+      content: `
+### 乐器学习
+**·** 钢琴(业余8级，成都市艺术人才大赛一等奖)
+**·** 吉他&电吉他(自学)
+
+### 音乐创作
+**·** 以“hcxomnia”身份入驻主流音乐人平台，发布编曲专辑1张
+**·** 自媒体录制(翻弹作品，累计播放量1.5w+)
+
+### 文学爱好
+**·** 注册微信公众号“夏至以左”，上传原创小说、诗歌、杂谈等内容40余篇
+
+### 体育爱好
+**·** 热爱公路车骑行、足球、羽毛球
+`,
     },
   },
 };
@@ -279,91 +309,118 @@ const en: LocaleTexts = {
     sectionTitle: 'Personal Resume',
     education: {
       title: 'Education',
-      subtitle: 'Academic Background',
+      subtitle: '',
       content: `# Fudan University
-Computer Science and Technology | Bachelor
-Sep 2022 - June 2026
+Computer Science and Technology｜Bachelor｜Sep 2022-June 2026
+---
 
-## Academic Information
-Overall GPA: 87 / 100
-Advisor: Professor Yanghua Xiao
-Knowledge Works Research Laboratory @ Fudan University
+### Academic Information
+**·** Overall GPA: 87/100(3.42/4.00)
+**·** Advisor: Prof. Yanghua Xiao
+**·** Laboratory: Knowledge Works Research Laboratory
 
-## English Proficiency
-IELTS (7.5) | CET-4 (621) | CET-6 (604)
+### English Proficiency
+**·** IELTS: 7.5｜CET-4: 621｜CET-6: 604
 
-## Major Courses
-Computer Organization and Architecture (A), Computer Visualization (A), Database System (A), Artificial Intelligence (A-), Operating Systems (A-), Computer Networks (A-)`,
+# CUHK(SZ)
+Computer Science｜Master of Philosophy｜Upcoming
+---
+
+### Advisor
+**·** Prof. Zhizheng Wu(School of Data Science)
+**·** Prof. Ping Jin(School of Music, Joint Program)
+
+### Research Fields
+**·** AI+Music
+`,
     },
     internship: {
       title: 'Internship',
-      subtitle: 'Work Experience',
+      subtitle: '',
       content: `# ByteDance
-AI Application Engineer
-June 2025 - Oct 2025
+AI Application Engineer｜June 2025-Oct 2025
+---
 
-- Prompt engineering for AI-powered Apps & Websites generation platform: Applied a rule-driven prompt template to guide LLM-based, cross-platform, pixel-level and highly maintainable conversion from HTML draft & OpenAPI specification to React Web/Native codes; Designed a self-debugging functionality for detecting and fixing compilation & runtime errors (Compilation pass rate increased from 65.2% to 89.0%)
-- API integration and e2e data refinement: Implemented an automated migration and integration flow from mocked data to OpenAPI backend services; Developed the standardized management of asynchronous data streams
-- Technical research, testing and maintenance: Delivered automated testing processes for generated codes (Daily debugging volume: 180+ projects); Responsible for Expo SDK compatibility maintenance and dependencies version management`,
+### Prompt engineering for AI-powered Apps & Websites generation platform
+**·** Applied a rule-driven prompt template to guide LLM-based, cross-platform, pixel-level and highly maintainable conversion from HTML draft & OpenAPI specification to React Web/Native codes
+**·** Designed a self-debugging functionality for detecting and fixing compilation & runtime errors (Compilation pass rate increased from 65.2% to 89.0%)
+
+### API integration and e2e data refinement
+**·** Implemented an automated migration and integration flow from mocked data to OpenAPI backend services
+**·** Developed the standardized management of asynchronous data streams
+
+### Technical research, testing and maintenance
+**·** Delivered automated testing processes for generated codes (Daily debugging volume: 180+ projects)
+**·** Responsible for Expo SDK compatibility maintenance and dependencies version management`,
     },
     research: {
       title: 'Research',
-      subtitle: 'Academic Research',
-      content: `# Knowledge Works Research Laboratory @ Fudan University
-Research Assistant
-May 2025 - Present
+      subtitle: '',
+      content: `# Knowledge Works Research Laboratory
+Research Assistant｜May 2025-Present
+---
 
-- Autonomous Collaboration Optimization of Multi-Agent Systems (MAS): Investigated and summarized the accuracy scores of mainstream single/multi-agent systems on model capability evaluation benchmark datasets such as BrowseComp and HLE; Analyzed the anomalous phenomena and causes in multi-agent retrieval experiments
+### Autonomous Collaboration Optimization of Multi-Agent Systems (MAS)
+**·** Investigated and summarized the accuracy scores of mainstream single/multi-agent systems on model capability evaluation benchmark datasets such as *BrowseComp* and *HLE*
+**·** Analyzed the anomalous phenomena and causes in multi-agent retrieval experiments
 
-# Data Analytics and Security Laboratory @ Fudan University
-Research Assistant
-Oct 2024 - Apr 2025
+# Data Analytics and Security Laboratory
+Research Assistant｜Oct 2024-Apr 2025
+---
 
-- Data Alignment for Vertical Privacy-Preserving Machine Learning: Collected vertically distributed datasets; Conducted efficiency comparison experiments; Organized experimental data and plotted charts; Responsible for checking the semantic and notational consistency as well as protocol correctness of the paper (Submitted to TIFS)`,
+### Data Alignment for Vertical Privacy-Preserving Machine Learning
+**·** Collected vertically distributed datasets; Conducted efficiency comparison experiments; Organized experimental data and plotted charts
+**·** Responsible for checking the semantic and notational consistency as well as protocol correctness of the paper (Submitted to TIFS)`,
     },
     projects: {
       title: 'Projects',
-      subtitle: 'Technical Projects',
+      subtitle: '',
       content: `# GeRM: AI Agent for In-Place README Document Generation
-Feb 2025 - Apr 2025
+Personal Project｜Feb 2025-Apr 2025
+---
 
-- Utilized LLM & AST to parse repositories; Applied prompt engineering to generate formatted README documents
-- Designed with a microservices architecture, supporting Web UI interactions and customizable templates
-- Upgraded to a VSCode Extension, integrating into IDEs for efficiency and user experience enhancement; Created an evaluation mechanism for generated content to optimize prompts and customized templates
-
-# LoRA-Based Fine-Tuning of the Phi-3 Language Model
-Jan 2025 - Feb 2025
-
-- Fine-tuned the Microsoft Phi-3-Mini-4K-Instruct language model using LoRA technology
-- Utilized Flash Attention 2 to optimize computational efficiency
-- Employed Hugging Face Transformers and TRL libraries for Supervised Fine-Tuning (SFT)
-- Introduced dataset engineering ideas and applied high-quality data screening to improve model training quality and convergence speed
+**·** Utilized LLM & AST to parse repositories; Applied prompt engineering to generate formatted README documents
+**·** Designed with a microservices architecture, supporting Web UI interactions and customizable templates
+**·** Upgraded to a VSCode Extension, integrating into IDEs for efficiency and user experience enhancement; Created an evaluation mechanism for generated content to optimize prompts and customized templates
 
 # AlgoRhythm: Rhythm Game with Customizable Chart & Level
-Oct 2024 - Dec 2024
+Personal Project｜Oct 2024-Dec 2024
+---
 
-- Parsed user's input audio based on Librosa to achieve automatic mapping from audio to rhythm game charts
-- Adopted Web Audio API for audio playback and synchronization
-- Used CSS3 & JavaScript to achieve high-performance rendering and real-time feedback`,
+**·** Parsed user's input audio based on Librosa to achieve automatic mapping from audio to rhythm game charts
+**·** Adopted Web Audio API for audio playback and synchronization
+**·** Used CSS3 & JavaScript to achieve high-performance rendering and real-time feedback`,
     },
     competitions: {
       title: 'Competitions',
-      subtitle: 'Awards & Honors',
+      subtitle: '',
       content: `# Shanghai Showcase - Empowering Metropolis Heritage Building Tours with LLMs
-June 2024 - Oct 2024
+Competition Awards｜June 2024-Oct 2024
+---
 
-- Responsibilities: UI Design (Figma + AIGC), Frontend Development (Vue), Multi-level Map Display (Echarts), Data Collection and Cleaning; Utilized LLM Agent
-- Awards: Merit Award + Most Popular Award (Application Development Track) (The 9th Shanghai Library Open Data Competition (SLOC))`,
+### Responsibilities
+**·** UI Design (Figma + AIGC), Frontend Development (Vue), Multi-level Map Display (Echarts), Data Collection and Cleaning; Utilized LLM Agent
+
+### Awards
+**·** Merit Award + Most Popular Award (Application Development Track) in The 9th Shanghai Library Open Data Competition (SLOC)`,
     },
-    about: {
-      title: 'Contact',
-      subtitle: 'Basic Information',
-      content: `# Chengxun Hong
+    hobbies: {
+      title: 'Hobbies',
+      subtitle: '',
+      content: `
+### Instruments
+**·** Piano
+**·** Guitar & Electric Guitar
 
-(+86) 181-9097-1811
-22300240021@m.fudan.edu.cn
-WeChat: luckinhcx
-github.com/hcxxxxxx`,
+### Music Creation
+**·** Published 1 album as "hcxomnia" on major music platforms
+**·** Recording covers (15k+ views)
+
+### Literary Interests
+**·** Registered WeChat official account "夏至以左" and uploaded 40+ original novels, poems, and essays
+
+### Sports Interests
+**·** Passionate about road cycling, football, and badminton`,
     },
   },
 };

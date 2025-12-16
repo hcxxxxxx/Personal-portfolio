@@ -9,7 +9,7 @@ import {
   FlaskConical, 
   Code2, 
   Trophy, 
-  Mail,
+  Heart,
   ChevronRight
 } from 'lucide-react';
 import Image from 'next/image';
@@ -29,12 +29,13 @@ interface InteractiveExperienceProps {
   custom?: CustomAnimationProps;
 }
 
-type ModuleId = 'education' | 'internship' | 'research' | 'projects' | 'competitions' | 'about';
+type ModuleId = 'education' | 'internship' | 'research' | 'projects' | 'competitions' | 'hobbies';
 
 interface ModuleConfig {
   id: ModuleId;
   icon: React.ReactNode;
   gradient: string;
+  gradientStyle: string; // CSS 渐变样式（用于内联样式）
   glowColor: string;
   bgColor: string; // 卡片背景色（对应渐变色的透明版本）
   position: { x: number; y: number };
@@ -122,6 +123,7 @@ const moduleConfigs: ModuleConfig[] = [
     id: 'education',
     icon: <GraduationCap size={28} strokeWidth={1.5} />,
     gradient: 'from-blue-500 to-cyan-400',
+    gradientStyle: 'linear-gradient(to right, #3b82f6, #22d3ee)',
     glowColor: 'rgba(59, 130, 246, 0.5)',
     bgColor: 'rgba(59, 130, 246, 0.1)',
     position: { x: -1, y: -1 },
@@ -130,6 +132,7 @@ const moduleConfigs: ModuleConfig[] = [
     id: 'internship',
     icon: <Briefcase size={28} strokeWidth={1.5} />,
     gradient: 'from-violet-500 to-purple-400',
+    gradientStyle: 'linear-gradient(to right, #8b5cf6, #a78bfa)',
     glowColor: 'rgba(139, 92, 246, 0.5)',
     bgColor: 'rgba(139, 92, 246, 0.1)',
     position: { x: 0, y: -1 },
@@ -138,6 +141,7 @@ const moduleConfigs: ModuleConfig[] = [
     id: 'research',
     icon: <FlaskConical size={28} strokeWidth={1.5} />,
     gradient: 'from-emerald-500 to-teal-400',
+    gradientStyle: 'linear-gradient(to right, #10b981, #2dd4bf)',
     glowColor: 'rgba(16, 185, 129, 0.5)',
     bgColor: 'rgba(16, 185, 129, 0.1)',
     position: { x: 1, y: -1 },
@@ -146,6 +150,7 @@ const moduleConfigs: ModuleConfig[] = [
     id: 'projects',
     icon: <Code2 size={28} strokeWidth={1.5} />,
     gradient: 'from-orange-500 to-amber-400',
+    gradientStyle: 'linear-gradient(to right, #f97316, #fbbf24)',
     glowColor: 'rgba(249, 115, 22, 0.5)',
     bgColor: 'rgba(249, 115, 22, 0.1)',
     position: { x: -1, y: 1 },
@@ -154,16 +159,18 @@ const moduleConfigs: ModuleConfig[] = [
     id: 'competitions',
     icon: <Trophy size={28} strokeWidth={1.5} />,
     gradient: 'from-pink-500 to-rose-400',
+    gradientStyle: 'linear-gradient(to right, #ec4899, #fb7185)',
     glowColor: 'rgba(236, 72, 153, 0.5)',
     bgColor: 'rgba(236, 72, 153, 0.1)',
     position: { x: 0, y: 1 },
   },
   {
-    id: 'about',
-    icon: <Mail size={28} strokeWidth={1.5} />,
-    gradient: 'from-sky-500 to-blue-400',
-    glowColor: 'rgba(14, 165, 233, 0.5)',
-    bgColor: 'rgba(14, 165, 233, 0.1)',
+    id: 'hobbies',
+    icon: <Heart size={28} strokeWidth={1.5} />,
+    gradient: 'from-rose-500 to-pink-400',
+    gradientStyle: 'linear-gradient(to right, #f43f5e, #f472b6)',
+    glowColor: 'rgba(244, 63, 94, 0.5)',
+    bgColor: 'rgba(244, 63, 94, 0.1)',
     position: { x: 1, y: 1 },
   },
 ];
@@ -209,7 +216,10 @@ const ModuleCard = ({ config, texts, onClick }: ModuleCardProps) => {
         style={{ backgroundColor: config.bgColor }}
     >
         {/* 顶部渐变装饰线 */}
-        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient}`} />
+        <div 
+          className="absolute top-0 left-0 right-0 h-1"
+          style={{ background: config.gradientStyle }}
+        />
         
         {/* 右侧大号背景图标阴影 */}
         <div className="absolute top-1/2 -translate-y-1/2 right-4 md:right-6 opacity-[0.1] scale-[3.5] md:scale-[4] pointer-events-none text-white">
@@ -288,7 +298,10 @@ const DetailModal = ({ moduleId, config, texts, onClose }: DetailModalProps) => 
         style={{ backgroundColor: 'rgba(15, 23, 42, 0.95)' }}
       >
         {/* 顶部渐变线 */}
-        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${config.gradient}`} />
+        <div 
+          className="absolute top-0 left-0 right-0 h-1.5"
+          style={{ background: config.gradientStyle }}
+        />
         
         {/* 关闭按钮 */}
         <button 
