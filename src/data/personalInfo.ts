@@ -1,213 +1,280 @@
 // 个人信息库 - 用于 AI 助手理解个人信息
 // 这个文件包含了结构化的个人信息，便于 AI 读取和理解
-// 所有个人信息都直接硬编码在此文件中，便于集中修改
+// 所有个人信息基于 locales.ts 中的内容
 
 // 将个人信息格式化为 AI 友好的系统提示词
-// 所有个人信息都直接硬编码在此方法中，便于集中修改
 export const formatPersonalInfoForAI = (language: 'zh' | 'en'): string => {
-  // ========== 个人信息配置区域 - 请在此处修改个人信息 ==========
+  // ========== 个人信息配置区域 - 基于 locales.ts ==========
   
   // 基本信息
   const basicInfo = {
     zh: {
       name: '洪成勋',
-      description: '复旦大学｜计算与智能创新学院｜计算机科学与技术'
+      description: '复旦大学｜计算机科学与技术\n复旦大学知识工场实验室\n前字节跳动实习生｜AI应用研发工程师'
     },
     en: {
       name: 'Chengxun Hong',
-      description: 'Fudan University｜Computer Science and Technology'
+      description: 'Fudan University | Computer Science and Technology\nKnowledge Works Research Laboratory @ Fudan University\nByteDance | AI Application Developer'
     }
   };
 
   // 教育背景
   const education = {
-    zh: {
-      school: '复旦大学',
-      degree: '计算机科学与技术学士',
-      date: '2022.09 - 2026.06',
-      gpa: 'GPA: 87/100',
-      advisor: '导师：肖仰华教授，知识工场实验室',
-      coreCourses: ['操作系统', '编译原理', '人工智能']
-    },
-    en: {
-      school: 'Fudan University',
-      degree: 'B.S. in Computer Science and Technology',
-      date: '2022.09 - 2026.06',
-      gpa: 'GPA: 87/100',
-      advisor: 'Advisor: Prof. Yanghua Xiao, Knowledge Works Laboratory',
-      coreCourses: ['Operating Systems', 'Compiler Principles', 'Artificial Intelligence']
-    }
+    zh: [
+      {
+        school: '复旦大学',
+        degree: '计算机科学与技术｜本科',
+        date: '2022年9月-2026年6月',
+        gpa: '绩点: 87/100(3.42/4.00)',
+        advisor: '导师: 肖仰华老师',
+        lab: '实验室: 知识工场实验室',
+        english: 'IELTS: 7.5｜CET-4: 621｜CET-6: 604'
+      },
+      {
+        school: '香港中文大学(深圳)',
+        degree: '计算机科学｜研究型硕士',
+        date: '待入学',
+        advisor: '武执政教授(数据科学学院)',
+        coAdvisor: '金平院长(音乐学院，联培)',
+        research: 'AI+音乐'
+      }
+    ],
+    en: [
+      {
+        school: 'Fudan University',
+        degree: 'Computer Science and Technology | Bachelor',
+        date: 'Sep 2022 - June 2026',
+        gpa: 'Overall GPA: 87/100(3.42/4.00)',
+        advisor: 'Advisor: Prof. Yanghua Xiao',
+        lab: 'Laboratory: Knowledge Works Research Laboratory',
+        english: 'IELTS: 7.5 | CET-4: 621 | CET-6: 604'
+      },
+      {
+        school: 'CUHK(SZ)',
+        degree: 'Computer Science | Master of Philosophy',
+        date: 'Upcoming',
+        advisor: 'Prof. Zhizheng Wu (School of Data Science)',
+        coAdvisor: 'Prof. Ping Jin (School of Music, Joint Program)',
+        research: 'AI+Music'
+      }
+    ]
   };
 
-  // 工作经历
+  // 实习经历
   const internship = {
     zh: {
       company: '字节跳动',
-      role: '软件工程师实习生，AI 平台',
-      date: '2025年6月 - 至今',
+      role: 'AI应用研发工程师',
+      date: '2025年6月-2025年10月',
       responsibilities: [
-        '领导了将 HTML 设计和 OpenAPI 规范转换为像素级完美 React 代码的规则驱动架构。',
-        '为生成的应用程序实现了编译和运行时错误的自修复功能。',
-        '自动化了模拟数据到真实 OpenAPI 后端的迁移，并标准化了异步数据流管理。',
-        '主导了自动化测试工作流程，并为内部用户提供技术支持。'
+        'AI应用生成平台提示词工程：设计并实现规则驱动的提示词架构，用于指导基于LLM的原生、像素级、高可维护性"HTML设计稿+OpenAPI规范→React Web/Native代码"转换，以及编译/运行报错的自我修复功能，编译通过率由65.2%提升至89.0%',
+        'API集成与全链路数据精修：负责从Draft-mocked数据到真实OpenAPI后端服务的自动化全面迁移与集成，以及异步数据流的标准化管理',
+        '自动化测试：设计并实现面向生成应用的自动化测试流程，日调试项目180+，负责Expo SDK兼容性维护与依赖库版本管理，同时负责内场运维和内测用户Oncall'
       ]
     },
     en: {
       company: 'ByteDance',
-      role: 'Software Engineer Intern, AI Platform',
-      date: 'June 2025 - Present',
+      role: 'AI Application Engineer',
+      date: 'June 2025 - Oct 2025',
       responsibilities: [
-        'Led rule-driven architecture for converting HTML designs & OpenAPI specs into pixel-perfect React code.',
-        'Implemented self-repair capabilities for compilation and runtime errors in the generated applications.',
-        'Automated migration of mock data to real OpenAPI backends and standardized async data stream management.',
-        'Spearheaded automated testing workflows and provided technical support for internal users.'
+        'Prompt engineering for AI-powered Apps & Websites generation platform: Applied a rule-driven prompt template to guide LLM-based, cross-platform, pixel-level and highly maintainable conversion from HTML draft & OpenAPI specification to React Web/Native codes; Designed a self-debugging functionality for detecting and fixing compilation & runtime errors (Compilation pass rate increased from 65.2% to 89.0%)',
+        'API integration and e2e data refinement: Implemented an automated migration and integration flow from mocked data to OpenAPI backend services; Developed the standardized management of asynchronous data streams',
+        'Technical research, testing and maintenance: Delivered automated testing processes for generated codes (Daily debugging volume: 180+ projects); Responsible for Expo SDK compatibility maintenance and dependencies version management'
       ]
     }
+  };
+
+  // 科研经历
+  const research = {
+    zh: [
+      {
+        lab: '复旦大学知识工场实验室',
+        role: '科研助手',
+        date: '2025年5月至今',
+        project: '多智能体系统(MAS)自主协作优化',
+        description: '调研并汇总主流单/多Agent系统在BrowseComp、HLE等模型能力评估基准测试数据集上的准确率分数，分析多Agent检索实验反常现象及原因'
+      },
+      {
+        lab: '复旦大学数据分析与安全实验室',
+        role: '科研助手',
+        date: '2024年10月-2025年4月',
+        project: '纵向隐私保护机器学习的数据对齐',
+        description: '收集纵向分布数据集，做效率对比实验，整理实验数据并绘制图表，负责论文的语意和符号一致性、协议正确性的检查与修改(TIFS在投)'
+      }
+    ],
+    en: [
+      {
+        lab: 'Knowledge Works Research Laboratory @ Fudan University',
+        role: 'Research Assistant',
+        date: 'May 2025 - Present',
+        project: 'Autonomous Collaboration Optimization of Multi-Agent Systems (MAS)',
+        description: 'Investigated and summarized the accuracy scores of mainstream single/multi-agent systems on model capability evaluation benchmark datasets such as BrowseComp and HLE; Analyzed the anomalous phenomena and causes in multi-agent retrieval experiments'
+      },
+      {
+        lab: 'Data Analytics and Security Laboratory @ Fudan University',
+        role: 'Research Assistant',
+        date: 'Oct 2024 - Apr 2025',
+        project: 'Data Alignment for Vertical Privacy-Preserving Machine Learning',
+        description: 'Collected vertically distributed datasets; Conducted efficiency comparison experiments; Organized experimental data and plotted charts; Responsible for checking the semantic and notational consistency as well as protocol correctness of the paper (Submitted to TIFS)'
+      }
+    ]
   };
 
   // 项目经历
   const projects = {
     zh: [
       {
-        name: 'GERM: AI Agent for README Generation',
-        date: '2025年2月 - 2025年4月',
+        name: 'GeRM: README文档自动生成Agent',
+        date: '2025年2月-2025年4月',
         description: [
-          '开发了一个使用 LLM 和 AST 解析的智能体，从代码库自动生成结构化的 README。',
-          '构建了 Web UI 和 VSCode 扩展以增强开发者工作流程。',
-          '设计了内容评估系统以优化提示词和自定义模板。'
+          '利用LLM+AST解析代码仓库，结合规范化提示词生成结构化、清晰的README文档',
+          '支持Web UI交互，并扩展为VSCode插件集成至IDE，提升开发效率和用户体验',
+          '创建生成内容评估机制，优化提示词与客制化模板'
         ]
       },
       {
-        name: 'Phi-3 Fine-Tuning with LORA',
-        date: '2025年1月 - 2025年2月',
+        name: 'AlgoRhythm: 谱面关卡客制化音游',
+        date: '2024年10月-2024年12月',
         description: [
-          '使用 LORA 对 Phi-3-Mini-4K-Instruct 模型进行微调，使用 Flash Attention 2 优化性能。',
-          '使用 Hugging Face Transformers 和 TRL 库实现了监督微调（SFT）。'
+          '基于Librosa音频分析技术，多维度解析用户输入音频，实现音频到音游谱面的智能映射',
+          '采用Web Audio API处理音频播放和同步，CSS3+JavaScript实现高性能渲染与实时反馈'
         ]
       }
     ],
     en: [
       {
-        name: 'GERM: AI Agent for README Generation',
+        name: 'GeRM: AI Agent for In-Place README Document Generation',
         date: 'Feb 2025 - Apr 2025',
         description: [
-          'Developed an agent using LLMs and AST parsing to auto-generate structured READMEs from codebases.',
-          'Built a Web UI and a VSCode extension to enhance developer workflow.',
-          'Designed a content evaluation system to optimize prompts and customize templates.'
+          'Utilized LLM & AST to parse repositories; Applied prompt engineering to generate formatted README documents',
+          'Designed with a microservices architecture, supporting Web UI interactions and customizable templates',
+          'Upgraded to a VSCode Extension, integrating into IDEs for efficiency and user experience enhancement; Created an evaluation mechanism for generated content to optimize prompts and customized templates'
         ]
       },
       {
-        name: 'Phi-3 Fine-Tuning with LORA',
-        date: 'Jan 2025 - Feb 2025',
+        name: 'AlgoRhythm: Rhythm Game with Customizable Chart & Level',
+        date: 'Oct 2024 - Dec 2024',
         description: [
-          'Fine-tuned the Phi-3-Mini-4K-Instruct model using LORA, optimizing performance with Flash Attention 2.',
-          'Implemented Supervised Fine-Tuning (SFT) with Hugging Face Transformers and TRL libraries.'
+          'Parsed user\'s input audio based on Librosa to achieve automatic mapping from audio to rhythm game charts',
+          'Adopted Web Audio API for audio playback and synchronization',
+          'Used CSS3 & JavaScript to achieve high-performance rendering and real-time feedback'
         ]
       }
     ]
   };
 
-  // 获奖经历
-  const awards = {
+  // 比赛经历
+  const competitions = {
     zh: [
       {
-        name: '第九届上海图书馆开放数据竞赛',
-        award: '应用开发赛道 一等奖 & 人气奖',
-        project: '项目 "沪上展映"',
-        contributions: [
-          '负责 UI 设计（Figma + AIGC）和前端开发（Vue）。',
-          '领导数据收集和预处理流程。'
-        ]
+        name: '沪上展映：大模型赋能申城旧建巡游',
+        date: '2024年6月-2024年10月',
+        role: '负责UI设计(Figma+AIGC)与前端开发(Vue框架)，主导数据采集与预处理流程',
+        award: '第9届上海图书馆开放数据竞赛-应用开发类赛道优胜奖与人气奖'
       }
     ],
     en: [
       {
-        name: '9th Shanghai Library Open Data Competition',
-        award: 'Winner & Popularity Award, Application Development Track',
-        project: 'Project "Shanghai Vision"',
-        contributions: [
-          'Responsible for UI design (Figma + AIGC) and front-end development (Vue).',
-          'Led the data collection and preprocessing pipeline.'
-        ]
+        name: 'Shanghai Showcase - Empowering Metropolis Heritage Building Tours with LLMs',
+        date: 'June 2024 - Oct 2024',
+        role: 'UI Design (Figma + AIGC), Frontend Development (Vue), Multi-level Map Display (Echarts), Data Collection and Cleaning; Utilized LLM Agent',
+        award: 'Merit Award + Most Popular Award (Application Development Track) in The 9th Shanghai Library Open Data Competition (SLOC)'
       }
     ]
   };
 
-  // 技能
-  const skills = {
-    languages: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C++'],
-    frameworks: ['React', 'Next.js', 'Vue', 'Node.js'],
-    tools: ['Figma', 'Git', 'VSCode', 'Hugging Face', 'Transformers'],
-    platforms: ['AWS', 'OpenAPI', 'VSCode Extension']
+  // 兴趣爱好
+  const hobbies = {
+    zh: {
+      instruments: ['钢琴(业余8级，成都市艺术人才大赛一等奖)', '吉他&电吉他(自学)'],
+      music: [
+        '以"hcxomnia"身份入驻主流音乐人平台，发布编曲专辑1张',
+        '自媒体录制(翻弹作品，累计播放量1.5w+)'
+      ],
+      literature: '注册微信公众号"夏至以左"，上传原创小说、诗歌、杂谈等内容40余篇',
+      sports: ['公路车骑行', '足球', '羽毛球']
+    },
+    en: {
+      instruments: ['Piano', 'Guitar & Electric Guitar'],
+      music: [
+        'Published 1 album as "hcxomnia" on major music platforms',
+        'Recording covers (15k+ views)'
+      ],
+      literature: 'Registered WeChat official account "夏至以左" and uploaded 40+ original novels, poems, and essays',
+      sports: ['Road cycling', 'Football', 'Badminton']
+    }
   };
 
   // ========== 个人信息配置区域结束 ==========
 
-  // 根据语言选择对应的信息
-  const info = language === 'zh' 
-    ? {
-        basic: basicInfo.zh,
-        education: education.zh,
-        internship: internship.zh,
-        projects: projects.zh,
-        awards: awards.zh,
-        skills
-      }
-    : {
-        basic: basicInfo.en,
-        education: education.en,
-        internship: internship.en,
-        projects: projects.en,
-        awards: awards.en,
-        skills
-      };
-
   // 生成系统提示词
   const systemPrompt = language === 'zh' 
-    ? `你是一个专业的 AI 助手，专门回答关于 ${info.basic.name} 的个人信息问题。
+    ? `你是一个专业的 AI 助手，专门回答关于 ${basicInfo.zh.name} 的个人信息问题。
 
 ## 基本信息
-- 姓名：${info.basic.name}
-- 简介：${info.basic.description}
+- 姓名：${basicInfo.zh.name}
+- 简介：${basicInfo.zh.description}
 
 ## 教育背景
-- 学校：${info.education.school}
-- 学位：${info.education.degree}
-- 时间：${info.education.date}
-- ${info.education.gpa}
-- ${info.education.advisor}
-- 核心课程：${info.education.coreCourses.join('、')}
+### ${education.zh[0].school}
+- 学位：${education.zh[0].degree}
+- 时间：${education.zh[0].date}
+- ${education.zh[0].gpa}
+- ${education.zh[0].advisor}
+- ${education.zh[0].lab}
+- 英语成绩：${education.zh[0].english}
 
-## 工作经历
-### 实习经历
-- 公司：${info.internship.company}
-- 职位：${info.internship.role}
-- 时间：${info.internship.date}
-- 主要职责：
-${info.internship.responsibilities.map(r => `  - ${r}`).join('\n')}
+### ${education.zh[1].school}
+- 学位：${education.zh[1].degree}
+- 状态：${education.zh[1].date}
+- 导师：${education.zh[1].advisor}
+- 联培导师：${education.zh[1].coAdvisor}
+- 研究方向：${education.zh[1].research}
+
+## 实习经历
+### ${internship.zh.company}
+- 职位：${internship.zh.role}
+- 时间：${internship.zh.date}
+- 主要工作：
+${internship.zh.responsibilities.map(r => `  - ${r}`).join('\n')}
+
+## 科研经历
+${research.zh.map(r => `
+### ${r.lab}
+- 职位：${r.role}
+- 时间：${r.date}
+- 项目：${r.project}
+- 描述：${r.description}
+`).join('\n')}
 
 ## 项目经历
-${info.projects.map(project => `
-### ${project.name}
-- 时间：${project.date}
+${projects.zh.map(p => `
+### ${p.name}
+- 时间：${p.date}
 - 描述：
-${project.description.map(d => `  - ${d}`).join('\n')}
+${p.description.map(d => `  - ${d}`).join('\n')}
 `).join('\n')}
 
-## 获奖经历
-${info.awards.map(award => `
-### ${award.name}
-- 奖项：${award.award}
-- 项目：${award.project}
-- 贡献：
-${award.contributions.map(c => `  - ${c}`).join('\n')}
+## 比赛经历
+${competitions.zh.map(c => `
+### ${c.name}
+- 时间：${c.date}
+- 职责：${c.role}
+- 获奖：${c.award}
 `).join('\n')}
 
-## 技能
-- 编程语言：${info.skills.languages.join('、')}
-- 框架/库：${info.skills.frameworks.join('、')}
-- 工具：${info.skills.tools.join('、')}
-- 平台：${info.skills.platforms.join('、')}
+## 兴趣爱好
+### 乐器
+${hobbies.zh.instruments.map(i => `- ${i}`).join('\n')}
+
+### 音乐创作
+${hobbies.zh.music.map(m => `- ${m}`).join('\n')}
+
+### 文学爱好
+- ${hobbies.zh.literature}
+
+### 体育爱好
+- 热爱${hobbies.zh.sports.join('、')}
 
 ## 回答要求
 1. 基于以上信息回答问题，不要编造不存在的信息
@@ -215,50 +282,73 @@ ${award.contributions.map(c => `  - ${c}`).join('\n')}
 3. 如果问题超出以上信息范围，礼貌地说明你只了解上述信息
 4. 使用中文回答
 5. 回答要简洁明了，重点突出`
-    : `You are a professional AI assistant specialized in answering questions about ${info.basic.name}'s personal information.
+
+    : `You are a professional AI assistant specialized in answering questions about ${basicInfo.en.name}'s personal information.
 
 ## Basic Information
-- Name: ${info.basic.name}
-- Description: ${info.basic.description}
+- Name: ${basicInfo.en.name}
+- Description: ${basicInfo.en.description}
 
 ## Education
-- School: ${info.education.school}
-- Degree: ${info.education.degree}
-- Date: ${info.education.date}
-- ${info.education.gpa}
-- ${info.education.advisor}
-- Core Courses: ${info.education.coreCourses.join(', ')}
+### ${education.en[0].school}
+- Degree: ${education.en[0].degree}
+- Date: ${education.en[0].date}
+- ${education.en[0].gpa}
+- ${education.en[0].advisor}
+- ${education.en[0].lab}
+- English Proficiency: ${education.en[0].english}
 
-## Work Experience
-### Internship
-- Company: ${info.internship.company}
-- Role: ${info.internship.role}
-- Date: ${info.internship.date}
+### ${education.en[1].school}
+- Degree: ${education.en[1].degree}
+- Status: ${education.en[1].date}
+- Advisor: ${education.en[1].advisor}
+- Co-Advisor: ${education.en[1].coAdvisor}
+- Research Fields: ${education.en[1].research}
+
+## Internship Experience
+### ${internship.en.company}
+- Role: ${internship.en.role}
+- Date: ${internship.en.date}
 - Key Responsibilities:
-${info.internship.responsibilities.map(r => `  - ${r}`).join('\n')}
+${internship.en.responsibilities.map(r => `  - ${r}`).join('\n')}
+
+## Research Experience
+${research.en.map(r => `
+### ${r.lab}
+- Role: ${r.role}
+- Date: ${r.date}
+- Project: ${r.project}
+- Description: ${r.description}
+`).join('\n')}
 
 ## Projects
-${info.projects.map(project => `
-### ${project.name}
-- Date: ${project.date}
+${projects.en.map(p => `
+### ${p.name}
+- Date: ${p.date}
 - Description:
-${project.description.map(d => `  - ${d}`).join('\n')}
+${p.description.map(d => `  - ${d}`).join('\n')}
 `).join('\n')}
 
-## Awards
-${info.awards.map(award => `
-### ${award.name}
-- Award: ${award.award}
-- Project: ${award.project}
-- Contributions:
-${award.contributions.map(c => `  - ${c}`).join('\n')}
+## Competitions
+${competitions.en.map(c => `
+### ${c.name}
+- Date: ${c.date}
+- Role: ${c.role}
+- Award: ${c.award}
 `).join('\n')}
 
-## Skills
-- Programming Languages: ${info.skills.languages.join(', ')}
-- Frameworks/Libraries: ${info.skills.frameworks.join(', ')}
-- Tools: ${info.skills.tools.join(', ')}
-- Platforms: ${info.skills.platforms.join(', ')}
+## Hobbies & Interests
+### Instruments
+${hobbies.en.instruments.map(i => `- ${i}`).join('\n')}
+
+### Music Creation
+${hobbies.en.music.map(m => `- ${m}`).join('\n')}
+
+### Literary Interests
+- ${hobbies.en.literature}
+
+### Sports
+- Passionate about ${hobbies.en.sports.join(', ')}
 
 ## Response Guidelines
 1. Answer questions based on the above information only. Do not make up information that doesn't exist.
@@ -269,4 +359,3 @@ ${award.contributions.map(c => `  - ${c}`).join('\n')}
 
   return systemPrompt;
 };
-

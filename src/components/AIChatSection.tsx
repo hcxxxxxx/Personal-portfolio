@@ -222,10 +222,8 @@ const TypingIndicator = () => (
   </motion.div>
 );
 
-// OpenAI API 配置
-const OPENAI_API_KEY = 'sk-SDYc0d98e619cef4373aa7d9cb59eeb7aa42fc7fb83SHvPv';
-const OPENAI_API_BASE_URL = 'https://api.gptsapi.net';
-const OPENAI_MODEL = 'gpt-4o-mini';
+// API 路由配置（通过服务端代理调用，避免 CORS 和密钥暴露问题）
+const CHAT_API_ENDPOINT = '/api/chat';
 
 // AI 聊天部分的主组件
 export default function AIChatSection() {
@@ -472,18 +470,14 @@ export default function AIChatSection() {
         },
       ];
 
-      // 调用 OpenAI API
-      const response = await fetch(`${OPENAI_API_BASE_URL}/v1/chat/completions`, {
+      // 调用内部 API 路由（服务端代理）
+      const response = await fetch(CHAT_API_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: OPENAI_MODEL,
           messages: messagesForAPI,
-          temperature: 0.7,
-          max_tokens: 1000,
         }),
       });
 
