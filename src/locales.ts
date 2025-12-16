@@ -1,6 +1,13 @@
 // 语言类型定义
 export type Language = 'zh' | 'en';
 
+// 模块内容类型 - 使用 Markdown 格式
+export interface ModuleContent {
+  title: string;
+  subtitle: string;
+  content: string; // Markdown 格式的内容
+}
+
 // 所有文本内容的类型定义
 export interface LocaleTexts {
   // 侧边导航
@@ -63,41 +70,15 @@ export interface LocaleTexts {
     };
   };
   
-  // 经历部分
+  // 经历部分 - 6个模块，每个模块使用 Markdown 格式
   experience: {
-    education: {
-      title: string;
-      school: string;
-      degree: string;
-      date: string;
-      points: string[];
-    };
-    competition: {
-      title: string;
-      name: string;
-      award: string;
-      project: string;
-      points: string[];
-    };
-    projectGerm: {
-      title: string;
-      name: string;
-      date: string;
-      points: string[];
-    };
-    projectPhi3: {
-      title: string;
-      name: string;
-      date: string;
-      points: string[];
-    };
-    internship: {
-      title: string;
-      company: string;
-      role: string;
-      date: string;
-      points: string[];
-    };
+    sectionTitle: string;
+    education: ModuleContent;
+    internship: ModuleContent;
+    research: ModuleContent;
+    projects: ModuleContent;
+    competitions: ModuleContent;
+    about: ModuleContent;
   };
 }
 
@@ -123,10 +104,7 @@ const zh: LocaleTexts = {
   },
   hero: {
     name: '洪成勋',
-    description: '复旦大学｜计算与智能创新学院｜计算机科学与技术\n\
-    复旦大学知识工场实验室\n\
-    复旦大学数据分析与安全实验室\n\
-    前字节跳动实习生｜AI应用研发工程师',
+    description: '复旦大学｜计算机科学与技术\n复旦大学知识工场实验室\n前字节跳动实习生｜AI应用研发工程师',
   },
   contact: {
     title: 'AlgoRhythm',
@@ -159,58 +137,86 @@ const zh: LocaleTexts = {
     },
   },
   experience: {
+    sectionTitle: '个人简历',
     education: {
-      title: '教育',
-      school: '复旦大学',
-      degree: '计算机科学与技术学士',
-      date: '2022.09 - 2026.06',
-      points: [
-        'GPA: 87/100 (3.42/4.00)，英语: 雅思-7.5，四级-621，六级-604',
-        '实验室：知识工场实验室(2025.5至今)，数据分析与安全实验室(2024.10-2025.4)',
-        '主修课程：数据结构、算法设计与分析、计算机组成与体系结构、操作系统、编译原理、人工智能等',
-      ],
-    },
-    competition: {
-      title: '奖项',
-      name: '第九届上海图书馆开放数据竞赛',
-      award: '应用开发赛道 优胜奖 & 人气奖',
-      project: '项目 "沪上展映"',
-      points: [
-        '参赛作品：“沪上展映：大模型赋能申城旧建巡游”',
-        '负责 UI 设计（Figma + AIGC）和前端开发（Vue）',
-        '同时负责数据收集和预处理流程',
-      ],
-    },
-    projectGerm: {
-      title: 'GERM',
-      name: 'GERM: README自动生成Agent',
-      date: '2025年2月 - 2025年4月',
-      points: [
-        '开发了一个使用 LLM 和 AST 解析的智能体，从代码库自动生成结构化的 README',
-        '构建了 Web UI 和 VSCode 扩展以增强开发者工作流程',
-        '设计了内容评估系统以优化提示词和自定义模板',
-      ],
-    },
-    projectPhi3: {
-      title: 'Phi-3',
-      name: 'Phi-3 Fine-Tuning with LORA',
-      date: '2025年1月 - 2025年2月',
-      points: [
-        '使用 LORA 对 Phi-3-Mini-4K-Instruct 模型进行微调，使用 Flash Attention 2 优化性能',
-        '使用 Hugging Face Transformers 和 TRL 库实现了监督微调（SFT）',
-      ],
+      title: '教育经历',
+      subtitle: '学术背景',
+      content: `# 复旦大学
+计算机科学与技术｜本科｜2022年9月-2026年6月
+---
+### 学业信息
+绩点: 87/100(3.42/4.00)
+导师: 肖仰华老师
+实验室: 知识工场实验室
+
+### 英语成绩
+IELTS: 7.5｜CET-4: 621｜CET-6: 604
+`,
     },
     internship: {
-      title: '实习',
-      company: '字节跳动',
-      role: '软件工程师实习生，AI 平台',
-      date: '2025年6月 - 至今',
-      points: [
-        '参与了将 HTML 设计和 OpenAPI 规范转换为像素级完美 React 代码的规则驱动架构',
-        '为生成的应用程序实现了编译和运行时错误的自修复功能',
-        '自动化模拟数据到真实 OpenAPI 后端的迁移，并标准化了异步数据流管理',
-        '主导了自动化测试工作流程，并为内部用户提供技术支持',
-      ],
+      title: '实习经历',
+      subtitle: '工作经验',
+      content: `# 字节跳动
+AI应用研发工程师｜2025年6月-2025年10月
+---
+### AI应用生成平台提示词工程
+设计并实现规则驱动的提示词架构，用于指导基于LLM的原生、像素级、高可维护性"HTML设计稿+OpenAPI规范→React Web/Native代码"转换，以及编译/运行报错的自我修复功能，编译通过率由65.2%提升至89.0%
+### API集成与全链路数据精修
+负责从Draft-mocked数据到真实OpenAPI后端服务的自动化全面迁移与集成，以及异步数据流的标准化管理
+### 自动化测试
+设计并实现面向生成应用的自动化测试流程，日调试项目180+，负责Expo SDK兼容性维护与依赖库版本管理，同时负责内场运维和内测用户Oncall`,
+    },
+    research: {
+      title: '科研经历',
+      subtitle: '学术研究',
+      content: `# 复旦大学知识工场实验室
+科研助手｜2025年5月至今
+---
+### 多智能体系统(MAS)自主协作优化
+调研并汇总主流单/多Agent系统在*BrowseComp*、*HLE*等模型能力评估基准测试数据集上的准确率分数，分析多Agent检索实验反常现象及原因
+
+# 复旦大学数据分析与安全实验室
+科研助手｜2024年10月-2025年4月
+---
+### 纵向隐私保护机器学习的数据对齐
+收集纵向分布数据集，做效率对比实验，整理实验数据并绘制图表，负责论文的语意和符号一致性、协议正确性的检查与修改(TIFS在投)`,
+    },
+    projects: {
+      title: '项目经历',
+      subtitle: '技术项目',
+      content: `# GeRM: README文档自动生成Agent
+个人项目｜2025年2月-2025年4月
+---
+利用LLM+AST解析代码仓库，结合规范化提示词生成结构化、清晰的README文档
+支持Web UI交互，并扩展为VSCode插件集成至IDE，提升开发效率和用户体验
+创建生成内容评估机制，优化提示词与客制化模板
+
+# AlgoRhythm: 谱面关卡客制化音游
+个人项目｜2024年10月-2024年12月
+---
+基于Librosa音频分析技术，多维度解析用户输入音频，实现音频到音游谱面的智能映射
+采用Web Audio API处理音频播放和同步，CSS3+JavaScript实现高性能渲染与实时反馈`,
+    },
+    competitions: {
+      title: '比赛经历',
+      subtitle: '竞赛获奖',
+      content: `# 沪上展映：大模型赋能申城旧建巡游
+竞赛获奖｜2024年6月-2024年10月
+---
+### 职责
+负责UI设计(Figma+AIGC)与前端开发(Vue框架)，主导数据采集与预处理流程
+### 获奖情况
+项目获第9届上海图书馆开放数据竞赛-应用开发类赛道优胜奖与人气奖`,
+    },
+    about: {
+      title: '联系方式',
+      subtitle: '基本信息',
+      content: `# 洪成勋
+
+(+86) 181-9097-1811
+22300240021@m.fudan.edu.cn
+微信：luckinhcx
+github.com/hcxxxxxx`,
     },
   },
 };
@@ -237,10 +243,7 @@ const en: LocaleTexts = {
   },
   hero: {
     name: 'Chengxun Hong',
-    description: 'Fudan University｜Computer Science and Technology\n\
-    Knowledge Works Research Laboratory @ Fudan University\n\
-    DASLab @ Fudan University\n\
-    ByteDance｜AI Application Developer',
+    description: 'Fudan University | Computer Science and Technology\nKnowledge Works Research Laboratory @ Fudan University\nByteDance | AI Application Developer',
   },
   contact: {
     title: 'AlgoRhythm',
@@ -273,57 +276,94 @@ const en: LocaleTexts = {
     },
   },
   experience: {
+    sectionTitle: 'Personal Resume',
     education: {
       title: 'Education',
-      school: 'Fudan University',
-      degree: 'B.S. in Computer Science and Technology',
-      date: '2022.09 - 2026.06',
-      points: [
-        'GPA: 87/100',
-        'Advisor: Prof. Yanghua Xiao, Knowledge Works Laboratory',
-        'Core Courses: Operating Systems, Compiler Principles, Artificial Intelligence',
-      ],
-    },
-    competition: {
-      title: 'Awards',
-      name: '9th Shanghai Library Open Data Competition',
-      award: 'Winner & Popularity Award, Application Development Track',
-      project: 'Project "Shanghai Vision"',
-      points: [
-        'Responsible for UI design (Figma + AIGC) and front-end development (Vue).',
-        'Led the data collection and preprocessing pipeline.',
-      ],
-    },
-    projectGerm: {
-      title: 'GERM',
-      name: 'GERM: AI Agent for README Generation',
-      date: 'Feb 2025 - Apr 2025',
-      points: [
-        'Developed an agent using LLMs and AST parsing to auto-generate structured READMEs from codebases.',
-        'Built a Web UI and a VSCode extension to enhance developer workflow.',
-        'Designed a content evaluation system to optimize prompts and customize templates.',
-      ],
-    },
-    projectPhi3: {
-      title: 'Phi-3',
-      name: 'Phi-3 Fine-Tuning with LORA',
-      date: 'Jan 2025 - Feb 2025',
-      points: [
-        'Fine-tuned the Phi-3-Mini-4K-Instruct model using LORA, optimizing performance with Flash Attention 2.',
-        'Implemented Supervised Fine-Tuning (SFT) with Hugging Face Transformers and TRL libraries.',
-      ],
+      subtitle: 'Academic Background',
+      content: `# Fudan University
+Computer Science and Technology | Bachelor
+Sep 2022 - June 2026
+
+## Academic Information
+Overall GPA: 87 / 100
+Advisor: Professor Yanghua Xiao
+Knowledge Works Research Laboratory @ Fudan University
+
+## English Proficiency
+IELTS (7.5) | CET-4 (621) | CET-6 (604)
+
+## Major Courses
+Computer Organization and Architecture (A), Computer Visualization (A), Database System (A), Artificial Intelligence (A-), Operating Systems (A-), Computer Networks (A-)`,
     },
     internship: {
       title: 'Internship',
-      company: 'ByteDance',
-      role: 'Software Engineer Intern, AI Platform',
-      date: 'June 2025 - Present',
-      points: [
-        'Led rule-driven architecture for converting HTML designs & OpenAPI specs into pixel-perfect React code.',
-        'Implemented self-repair capabilities for compilation and runtime errors in the generated applications.',
-        'Automated migration of mock data to real OpenAPI backends and standardized async data stream management.',
-        'Spearheaded automated testing workflows and provided technical support for internal users.',
-      ],
+      subtitle: 'Work Experience',
+      content: `# ByteDance
+AI Application Engineer
+June 2025 - Oct 2025
+
+- Prompt engineering for AI-powered Apps & Websites generation platform: Applied a rule-driven prompt template to guide LLM-based, cross-platform, pixel-level and highly maintainable conversion from HTML draft & OpenAPI specification to React Web/Native codes; Designed a self-debugging functionality for detecting and fixing compilation & runtime errors (Compilation pass rate increased from 65.2% to 89.0%)
+- API integration and e2e data refinement: Implemented an automated migration and integration flow from mocked data to OpenAPI backend services; Developed the standardized management of asynchronous data streams
+- Technical research, testing and maintenance: Delivered automated testing processes for generated codes (Daily debugging volume: 180+ projects); Responsible for Expo SDK compatibility maintenance and dependencies version management`,
+    },
+    research: {
+      title: 'Research',
+      subtitle: 'Academic Research',
+      content: `# Knowledge Works Research Laboratory @ Fudan University
+Research Assistant
+May 2025 - Present
+
+- Autonomous Collaboration Optimization of Multi-Agent Systems (MAS): Investigated and summarized the accuracy scores of mainstream single/multi-agent systems on model capability evaluation benchmark datasets such as BrowseComp and HLE; Analyzed the anomalous phenomena and causes in multi-agent retrieval experiments
+
+# Data Analytics and Security Laboratory @ Fudan University
+Research Assistant
+Oct 2024 - Apr 2025
+
+- Data Alignment for Vertical Privacy-Preserving Machine Learning: Collected vertically distributed datasets; Conducted efficiency comparison experiments; Organized experimental data and plotted charts; Responsible for checking the semantic and notational consistency as well as protocol correctness of the paper (Submitted to TIFS)`,
+    },
+    projects: {
+      title: 'Projects',
+      subtitle: 'Technical Projects',
+      content: `# GeRM: AI Agent for In-Place README Document Generation
+Feb 2025 - Apr 2025
+
+- Utilized LLM & AST to parse repositories; Applied prompt engineering to generate formatted README documents
+- Designed with a microservices architecture, supporting Web UI interactions and customizable templates
+- Upgraded to a VSCode Extension, integrating into IDEs for efficiency and user experience enhancement; Created an evaluation mechanism for generated content to optimize prompts and customized templates
+
+# LoRA-Based Fine-Tuning of the Phi-3 Language Model
+Jan 2025 - Feb 2025
+
+- Fine-tuned the Microsoft Phi-3-Mini-4K-Instruct language model using LoRA technology
+- Utilized Flash Attention 2 to optimize computational efficiency
+- Employed Hugging Face Transformers and TRL libraries for Supervised Fine-Tuning (SFT)
+- Introduced dataset engineering ideas and applied high-quality data screening to improve model training quality and convergence speed
+
+# AlgoRhythm: Rhythm Game with Customizable Chart & Level
+Oct 2024 - Dec 2024
+
+- Parsed user's input audio based on Librosa to achieve automatic mapping from audio to rhythm game charts
+- Adopted Web Audio API for audio playback and synchronization
+- Used CSS3 & JavaScript to achieve high-performance rendering and real-time feedback`,
+    },
+    competitions: {
+      title: 'Competitions',
+      subtitle: 'Awards & Honors',
+      content: `# Shanghai Showcase - Empowering Metropolis Heritage Building Tours with LLMs
+June 2024 - Oct 2024
+
+- Responsibilities: UI Design (Figma + AIGC), Frontend Development (Vue), Multi-level Map Display (Echarts), Data Collection and Cleaning; Utilized LLM Agent
+- Awards: Merit Award + Most Popular Award (Application Development Track) (The 9th Shanghai Library Open Data Competition (SLOC))`,
+    },
+    about: {
+      title: 'Contact',
+      subtitle: 'Basic Information',
+      content: `# Chengxun Hong
+
+(+86) 181-9097-1811
+22300240021@m.fudan.edu.cn
+WeChat: luckinhcx
+github.com/hcxxxxxx`,
     },
   },
 };
@@ -336,4 +376,3 @@ export const locales: Record<Language, LocaleTexts> = {
 
 // 获取指定语言的文本
 export const getTexts = (lang: Language): LocaleTexts => locales[lang];
-

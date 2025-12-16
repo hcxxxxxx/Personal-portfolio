@@ -2,13 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { X } from 'lucide-react';
+import { 
+  X, 
+  GraduationCap, 
+  Briefcase, 
+  FlaskConical, 
+  Code2, 
+  Trophy, 
+  Mail,
+  ChevronRight
+} from 'lucide-react';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useTypewriter } from '@/hooks/useTypewriter';
 import { LocaleTexts } from '@/locales';
 
-// --- 动画变体定义 ---
+// --- 类型定义 ---
 
 type View = 'hero' | 'experience' | 'chat' | 'contact';
 
@@ -21,6 +29,19 @@ interface InteractiveExperienceProps {
   custom?: CustomAnimationProps;
 }
 
+type ModuleId = 'education' | 'internship' | 'research' | 'projects' | 'competitions' | 'about';
+
+interface ModuleConfig {
+  id: ModuleId;
+  icon: React.ReactNode;
+  gradient: string;
+  glowColor: string;
+  bgColor: string; // 卡片背景色（对应渐变色的透明版本）
+  position: { x: number; y: number };
+}
+
+// --- 动画变体 ---
+
 const profileImageVariants: Variants = {
   initial: (custom?: CustomAnimationProps) => {
     if (custom?.prev === 'hero' && custom?.next === 'experience') {
@@ -28,419 +49,413 @@ const profileImageVariants: Variants = {
     }
     return { opacity: custom?.prev === 'chat' ? 0 : 1 };
   },
-  animate: (custom?: CustomAnimationProps) => {
-    if (custom?.prev === 'hero' && custom?.next === 'experience') {
-      return { opacity: 1 };
-    }
-    return {
+  animate: () => ({
       opacity: 1,
       transition: { duration: 0.7, delay: 0.2 }
-    };
-  },
+  }),
   exit: (custom?: CustomAnimationProps) => {
     if (custom?.next === 'chat') {
+      return { opacity: 0, transition: { duration: 0.4 } };
+    }
+    return {};
+  }
+};
+
+const containerVariants: Variants = {
+  initial: {},
+  animate: {},
+  exit: (custom?: CustomAnimationProps) => {
+    if (custom?.next === 'hero') {
       return {
+        y: '100%',
+        scale: 0.9,
         opacity: 0,
-        transition: { duration: 0.4 }
+        transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }
       };
     }
     return {};
   }
 };
 
-const orbitContainerVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
+const cardContainerVariants: Variants = {
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    scale: 1,
     transition: {
-      duration: 0.8,
+      delayChildren: 0.4,
       staggerChildren: 0.1,
-      delayChildren: 0.3,
     },
   },
   exit: {
     opacity: 0,
-    scale: 1.2,
-    transition: { duration: 0.5 }
+    transition: { duration: 0.3 }
   }
 };
 
-const planetVariants: Variants = {
-  hidden: { scale: 0, opacity: 0 },
+const cardVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
+    y: 20 
+  },
   visible: {
-    scale: 1,
     opacity: 1,
-    transition: { type: "spring", stiffness: 200, damping: 20 }
+    scale: 1,
+    y: 0,
+    transition: {
+      type: "spring", 
+      stiffness: 300, 
+      damping: 25 
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.8,
+    transition: { duration: 0.2 }
   }
 };
 
-// --- 类型定义 ---
+// --- 模块配置 ---
 
-interface ExperienceContent {
-  company?: string;
-  role?: string;
-  date?: string;
-  points: string[];
-  school?: string;
-  degree?: string;
-  name?: string;
-  award?: string;
-  project?: string;
-}
-
-interface ExperienceItem {
-  id: string;
-  logo: string | null;
-  title: string;
-  content: ExperienceContent;
-}
-
-interface OrbitDef {
-  radius: number;
-  size: number;
-}
-
-interface PlanetProps {
-  item: ExperienceItem;
-  index: number;
-  onSelect: (item: ExperienceItem) => void;
-  orbit: OrbitDef;
-  color: string;
-}
-
-interface DetailCardProps {
-  item: ExperienceItem;
-  onDeselect: () => void;
-}
-
-// --- 数据 ---
-const getExperienceData = (texts: LocaleTexts): ExperienceItem[] => [
+const moduleConfigs: ModuleConfig[] = [
   {
     id: 'education',
-    logo: '/degree.svg',
-    title: texts.experience.education.title,
-    content: {
-      school: texts.experience.education.school,
-      degree: texts.experience.education.degree,
-      date: texts.experience.education.date,
-      points: texts.experience.education.points,
-    },
-  },
-  {
-    id: 'competition',
-    logo: '/awards.svg',
-    title: texts.experience.competition.title,
-    content: {
-      name: texts.experience.competition.name,
-      award: texts.experience.competition.award,
-      project: texts.experience.competition.project,
-      points: texts.experience.competition.points,
-    },
-  },
-  {
-    id: 'project-germ',
-    logo: '/projects.svg',
-    title: texts.experience.projectGerm.title,
-    content: {
-      name: texts.experience.projectGerm.name,
-      date: texts.experience.projectGerm.date,
-      points: texts.experience.projectGerm.points,
-    },
-  },
-  {
-    id: 'project-phi3',
-    logo: '/hobby.svg',
-    title: texts.experience.projectPhi3.title,
-    content: {
-      name: texts.experience.projectPhi3.name,
-      date: texts.experience.projectPhi3.date,
-      points: texts.experience.projectPhi3.points,
-    },
+    icon: <GraduationCap size={28} strokeWidth={1.5} />,
+    gradient: 'from-blue-500 to-cyan-400',
+    glowColor: 'rgba(59, 130, 246, 0.5)',
+    bgColor: 'rgba(59, 130, 246, 0.1)',
+    position: { x: -1, y: -1 },
   },
   {
     id: 'internship',
-    logo: '/bytedance-logo.svg',
-    title: texts.experience.internship.title,
-    content: {
-      company: texts.experience.internship.company,
-      role: texts.experience.internship.role,
-      date: texts.experience.internship.date,
-      points: texts.experience.internship.points,
-    },
+    icon: <Briefcase size={28} strokeWidth={1.5} />,
+    gradient: 'from-violet-500 to-purple-400',
+    glowColor: 'rgba(139, 92, 246, 0.5)',
+    bgColor: 'rgba(139, 92, 246, 0.1)',
+    position: { x: 0, y: -1 },
+  },
+  {
+    id: 'research',
+    icon: <FlaskConical size={28} strokeWidth={1.5} />,
+    gradient: 'from-emerald-500 to-teal-400',
+    glowColor: 'rgba(16, 185, 129, 0.5)',
+    bgColor: 'rgba(16, 185, 129, 0.1)',
+    position: { x: 1, y: -1 },
+  },
+  {
+    id: 'projects',
+    icon: <Code2 size={28} strokeWidth={1.5} />,
+    gradient: 'from-orange-500 to-amber-400',
+    glowColor: 'rgba(249, 115, 22, 0.5)',
+    bgColor: 'rgba(249, 115, 22, 0.1)',
+    position: { x: -1, y: 1 },
+  },
+  {
+    id: 'competitions',
+    icon: <Trophy size={28} strokeWidth={1.5} />,
+    gradient: 'from-pink-500 to-rose-400',
+    glowColor: 'rgba(236, 72, 153, 0.5)',
+    bgColor: 'rgba(236, 72, 153, 0.1)',
+    position: { x: 0, y: 1 },
+  },
+  {
+    id: 'about',
+    icon: <Mail size={28} strokeWidth={1.5} />,
+    gradient: 'from-sky-500 to-blue-400',
+    glowColor: 'rgba(14, 165, 233, 0.5)',
+    bgColor: 'rgba(14, 165, 233, 0.1)',
+    position: { x: 1, y: 1 },
   },
 ];
 
-const orbits: OrbitDef[] = [
-  { radius: 180, size: 56 },
-  { radius: 240, size: 52 },
-  { radius: 300, size: 58 },
-  { radius: 360, size: 54 },
-  { radius: 420, size: 50 },
-];
+// --- 模块卡片组件 ---
 
-// --- 组件 ---
+interface ModuleCardProps {
+  config: ModuleConfig;
+  texts: LocaleTexts;
+  onClick: () => void;
+}
 
-// 行星组件：使用嵌套旋转实现高性能公转
-const Planet = ({ item, index, onSelect, orbit, color }: PlanetProps) => {
-  const { radius, size } = orbit;
-  
-  // 调整公转速度：外圈更慢
-  const duration = 20 + index * 5; 
-  // 随机起始角度，避免排成一条线
-  const initialRotate = index * 72; // (360 / 5) * index
+const ModuleCard = ({ config, texts, onClick }: ModuleCardProps) => {
+  const moduleTexts = texts.experience[config.id];
+  const title = moduleTexts.title;
+  const subtitle = moduleTexts.subtitle;
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-      {/* 轨道容器：负责公转动画 */}
-      <motion.div
-        style={{
-          width: radius * 2,
-          height: radius * 2,
-        }}
-        initial={{ rotate: initialRotate }}
-        animate={{ rotate: initialRotate + 360 }}
-        transition={{
-          duration: duration,
-          ease: "linear",
-          repeat: Infinity,
-        }}
-        className="relative rounded-full"
-      >
-        {/* 行星定位器：将行星定位到轨道边缘 */}
-        <div 
-          className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
-          style={{ width: size, height: size }}
-        >
-          {/* 行星自转抵消容器：反向旋转，确保图标始终正直 */}
-          <motion.div
-            style={{ width: '100%', height: '100%' }}
-            initial={{ rotate: -initialRotate }}
-            animate={{ rotate: -(initialRotate + 360) }}
-            transition={{
-              duration: duration,
-              ease: "linear",
-              repeat: Infinity,
-            }}
-          >
-            {/* 实际的行星视觉元素 */}
-            <motion.div
-              variants={planetVariants}
-              whileHover={{ 
-                scale: 1.2, 
-                filter: "brightness(1.2)",
-                boxShadow: `0 0 30px ${color}80`,
-              }}
-              onClick={() => onSelect(item)}
-              className="w-full h-full relative cursor-pointer group rounded-full"
-            >
-              {/* 行星光晕背景 */}
-              <div 
-                className="absolute inset-0 rounded-full blur-md opacity-40 transition-opacity duration-300 group-hover:opacity-80"
-                style={{ backgroundColor: color }}
-              />
-              
-              {/* 玻璃拟态主体 */}
-              <div className="absolute inset-0 rounded-full glass-card border border-white/20 flex items-center justify-center overflow-hidden bg-slate-900/40 backdrop-blur-md">
-                {/* 内部高光 */}
-                <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                
-                {item.logo ? (
-                  <div className="relative w-[60%] h-[60%] transition-transform duration-300 group-hover:scale-110">
-                     <Image 
-                      src={item.logo} 
-                      alt={item.title} 
-                      fill
-                      className="object-contain"
-                      unoptimized
-                    />
-                  </div>
-                ) : (
-                  <span className="text-[10px] font-bold text-slate-200 text-center px-1 leading-tight">
-                    {item.title}
-                  </span>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
+    <motion.div
+      variants={cardVariants}
+      whileHover={{ 
+        scale: 1.05,
+        y: -5,
+        transition: { duration: 0.2 }
+      }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className="relative cursor-pointer group"
+      style={{ 
+        gridColumn: config.position.x === 0 ? '2' : config.position.x === -1 ? '1' : '3',
+        gridRow: config.position.y === -1 ? '1' : '2',
+      }}
+    >
+      {/* 外层发光效果 */}
+      <div 
+        className="absolute -inset-1 rounded-2xl blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-500"
+        style={{ background: `linear-gradient(135deg, ${config.glowColor}, transparent)` }}
+      />
+      
+      {/* 主卡片 - 使用对应颜色的透明背景 */}
+      <div 
+        className="relative h-full backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden transition-all duration-300 group-hover:border-white/20"
+        style={{ backgroundColor: config.bgColor }}
+    >
+        {/* 顶部渐变装饰线 */}
+        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${config.gradient}`} />
+        
+        {/* 右侧大号背景图标阴影 */}
+        <div className="absolute top-1/2 -translate-y-1/2 right-4 md:right-6 opacity-[0.1] scale-[3.5] md:scale-[4] pointer-events-none text-white">
+          {config.icon}
         </div>
-      </motion.div>
-    </div>
+        
+        {/* 内容区域 */}
+        <div className="relative py-6 pr-6 md:py-8 md:pr-8 flex flex-col justify-center min-h-[140px] md:min-h-[160px]" style={{ paddingLeft: '2rem' }}>
+          {/* 标题 */}
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight ml-2 md:ml-4">
+            {title}
+          </h3>
+          
+          {/* 副标题 */}
+          <p className="text-sm md:text-base text-slate-400 font-light ml-2 md:ml-4">
+            {subtitle}
+          </p>
+          
+          {/* 箭头指示 */}
+          <div className="absolute bottom-5 right-5 md:bottom-6 md:right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+            <ChevronRight size={24} className="text-slate-400" />
+          </div>
+        </div>
+        
+        {/* 角落装饰 */}
+        <div className="absolute bottom-0 left-0 w-6 h-6 border-b border-l border-white/5 rounded-br-lg" />
+        <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-white/5 rounded-bl-lg" />
+      </div>
+    </motion.div>
   );
 };
 
-// 详情卡片组件
-const DetailCard = ({ item, onDeselect }: DetailCardProps) => {
-  const title = item.content.company || item.content.school || item.content.name || '';
-  const { displayText: titleText } = useTypewriter(title, { speed: 25, delay: 100 });
-  const { displayText: roleText } = useTypewriter(item.content.role || '', { speed: 20, delay: 400 });
-  
-  // 鼠标跟随发光效果
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
+// --- 详情弹窗组件 ---
 
+interface DetailModalProps {
+  moduleId: ModuleId;
+  config: ModuleConfig;
+  texts: LocaleTexts;
+  onClose: () => void;
+}
+
+const DetailModal = ({ moduleId, config, texts, onClose }: DetailModalProps) => {
+  const moduleData = texts.experience[moduleId];
+  const content = moduleData.content;
+
+  // 阻止滚轮事件冒泡，防止触发页面切换
+  const handleWheel = (e: React.WheelEvent) => {
+    e.stopPropagation();
+  };
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="absolute inset-0 w-full h-full flex items-center justify-center z-50 px-4 pointer-events-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 pointer-events-auto"
+      onWheel={handleWheel}
     >
       {/* 背景遮罩 */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/60 backdrop-blur-md" 
-        onClick={onDeselect}
+        className="absolute inset-0 bg-black/70 backdrop-blur-md" 
+        onClick={onClose}
       />
       
-      {/* 卡片主体 - 全息数据板风格 */}
+      {/* 弹窗主体 */}
       <motion.div 
-        layoutId={`card-${item.id}`} 
-        initial={{ scale: 0.9, opacity: 0, y: 20, rotateX: 10 }}
-        animate={{ scale: 1, opacity: 1, y: 0, rotateX: 0 }}
-        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="relative w-full max-w-4xl bg-slate-900/90 rounded-2xl border border-white/10 shadow-[0_0_50px_-10px_rgba(0,0,0,0.5)] overflow-hidden group"
-        onMouseMove={handleMouseMove}
-        style={{
-          perspective: "1000px",
-          transformStyle: "preserve-3d",
-        }}
+        className="relative w-full max-w-2xl max-h-[85vh] rounded-3xl border border-white/10 shadow-2xl overflow-hidden backdrop-blur-xl"
+        style={{ backgroundColor: 'rgba(15, 23, 42, 0.95)' }}
       >
-        {/* 鼠标跟随聚光灯效果 */}
-        <div 
-          className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100 z-0"
-          style={{
-            background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(56, 189, 248, 0.1), transparent 40%)`,
-          }}
-        />
-
-        {/* 动态网格背景 */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)] z-0 pointer-events-none" />
-
-        {/* 装饰性角落标记 */}
-        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-sky-500/50 rounded-tl-lg z-20" />
-        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-sky-500/50 rounded-tr-lg z-20" />
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-sky-500/50 rounded-bl-lg z-20" />
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-sky-500/50 rounded-br-lg z-20" />
-
-        {/* 关闭按钮 - 科技感设计 */}
+        {/* 顶部渐变线 */}
+        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${config.gradient}`} />
+        
+        {/* 关闭按钮 */}
         <button 
-          onClick={(e) => { e.stopPropagation(); onDeselect(); }} 
-          className="absolute top-6 right-6 z-50 p-2 group/close flex items-center justify-center"
+          onClick={onClose}
+          className="absolute z-50 p-2.5 rounded-full bg-white/10 text-slate-400 hover:text-white hover:bg-white/20 transition-all duration-300"
+          style={{ top: '24px', right: '24px' }}
         >
-          <div className="absolute inset-0 bg-red-500/10 rounded-full scale-0 group-hover/close:scale-100 transition-transform duration-300" />
-          <X className="w-6 h-6 text-slate-400 group-hover/close:text-red-400 transition-colors relative z-10" />
+          <X size={20} />
         </button>
-
-        <div className="relative z-10 flex flex-col md:flex-row h-full min-h-[400px]">
-          {/* 左侧：标题与元数据区域 */}
-          <div className="w-full md:w-2/5 p-8 md:p-10 bg-gradient-to-b from-slate-800/30 to-transparent border-b md:border-b-0 md:border-r border-white/5 flex flex-col justify-between relative overflow-hidden">
-            {/* 巨大的背景水印 Logo */}
-            {item.logo && (
-              <div className="absolute -right-10 -bottom-10 w-64 h-64 opacity-[0.03] grayscale pointer-events-none transform rotate-12">
-                <Image src={item.logo} alt="" fill className="object-contain" unoptimized />
-              </div>
-            )}
-
-            <div>
-              <div className="flex items-center space-x-2 mb-6">
-                <span className="h-px w-8 bg-sky-500/50" />
-                <span className="text-xs font-mono text-sky-400 uppercase tracking-widest">
-                  Experience Log
-                </span>
-              </div>
-              
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight tracking-tight">
-                {titleText}
-                <span className="inline-block w-2 h-2 bg-sky-500 rounded-full ml-2 animate-pulse" />
-              </h2>
-
-              {item.content.role && (
-                <div className="inline-block px-3 py-1 bg-sky-500/10 border border-sky-500/20 rounded text-sky-300 text-sm font-medium mb-2">
-                  {roleText}
-                </div>
-              )}
-            </div>
-
-            <div className="mt-8 md:mt-0">
-              {item.content.date && (
-                <div className="font-mono text-xs text-slate-500 uppercase tracking-wider border-l-2 border-slate-700 pl-3">
-                  Timeframe<br />
-                  <span className="text-slate-300 text-sm">{item.content.date}</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 右侧：详细内容列表 */}
-          <div className="w-full md:w-3/5 p-8 md:p-10 flex flex-col justify-center bg-slate-900/30">
-            <h3 className="text-sm font-mono text-slate-500 uppercase tracking-widest mb-6 flex items-center">
-              <span className="w-2 h-2 bg-slate-700 mr-2 rotate-45" />
-              
-            </h3>
-            <DetailPoints points={item.content.points} />
-          </div>
+        
+        {/* 内容区域 */}
+        <div 
+          className="relative z-10 overflow-y-auto custom-scrollbar"
+          style={{ 
+            padding: '48px 56px',
+            maxHeight: 'calc(85vh - 2px)'
+          }}
+        >
+          <MarkdownContent content={content} />
         </div>
       </motion.div>
     </motion.div>
   );
 };
 
-const DetailPoints = ({ points }: { points: string[] }) => {
-  return (
-    <ul className="space-y-5">
-      {points.map((point, i) => (
-        <PointItem key={i} point={point} index={i} />
+// --- Markdown 渲染组件 ---
+
+// 解析行内样式（加粗、斜体）
+const parseInlineStyles = (text: string): React.ReactNode => {
+  const parts: React.ReactNode[] = [];
+  let remaining = text;
+  let keyIndex = 0;
+
+  while (remaining.length > 0) {
+    // 匹配 **加粗**
+    const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
+    // 匹配 *斜体*
+    const italicMatch = remaining.match(/\*([^*]+)\*/);
+
+    if (boldMatch && (!italicMatch || boldMatch.index! <= italicMatch.index!)) {
+      const beforeText = remaining.slice(0, boldMatch.index);
+      if (beforeText) {
+        parts.push(beforeText);
+      }
+      parts.push(
+        <strong key={keyIndex++} className="font-bold text-white">
+          {boldMatch[1]}
+        </strong>
+      );
+      remaining = remaining.slice(boldMatch.index! + boldMatch[0].length);
+    } else if (italicMatch) {
+      const beforeText = remaining.slice(0, italicMatch.index);
+      if (beforeText) {
+        parts.push(beforeText);
+      }
+      parts.push(
+        <em key={keyIndex++} className="italic text-slate-200">
+          {italicMatch[1]}
+        </em>
+      );
+      remaining = remaining.slice(italicMatch.index! + italicMatch[0].length);
+    } else {
+      parts.push(remaining);
+      break;
+    }
+  }
+
+  return parts.length === 1 && typeof parts[0] === 'string' ? parts[0] : <>{parts}</>;
+};
+
+const MarkdownContent = ({ content }: { content: string }) => {
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  let listItems: string[] = [];
+  let lineIndex = 0;
+
+  const flushList = () => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={`list-${lineIndex}`} className="space-y-2 my-4">
+          {listItems.map((item, i) => (
+            <li key={i} className="text-slate-300 leading-relaxed">
+              {parseInlineStyles(item)}
+            </li>
       ))}
     </ul>
   );
-};
+      listItems = [];
+    }
+  };
 
-const PointItem = ({ point, index }: { point: string; index: number }) => {
-  return (
-    <motion.li 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.2 + index * 0.1, type: "spring", stiffness: 100 }}
-      className="flex items-start group relative pl-6"
-    >
-      {/* 科技感列表项装饰 */}
-      <div className="absolute left-0 top-2.5 w-3 h-px bg-slate-600 group-hover:w-4 group-hover:bg-sky-400 transition-all duration-300" />
-      <div className="absolute left-0 top-2.5 w-px h-3 bg-slate-600 group-hover:h-4 group-hover:bg-sky-400 transition-all duration-300 origin-top" />
-      
-      <span className="text-slate-300/90 leading-relaxed font-light tracking-wide text-[15px] group-hover:text-white transition-colors duration-300">
-        {point}
-      </span>
-    </motion.li>
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    lineIndex = i;
+
+    // 分隔线 ---
+    if (line.trim() === '---' || line.trim() === '***' || line.trim() === '___') {
+      flushList();
+      elements.push(
+        <hr key={i} className="border-t border-white/10 my-6" />
+      );
+    }
+    // 四级标题 ####
+    else if (line.startsWith('#### ')) {
+      flushList();
+      elements.push(
+        <div key={i} className="text-[16px] font-medium text-slate-200 mt-4 mb-1">
+          {parseInlineStyles(line.slice(5))}
+        </div>
+      );
+    }
+    // 三级标题 ###
+    else if (line.startsWith('### ')) {
+      flushList();
+      elements.push(
+        <div key={i} className="text-[20px] font-medium text-slate-100 mt-5 mb-2">
+          {parseInlineStyles(line.slice(4))}
+        </div>
+      );
+    }
+    // 二级标题 ##
+    else if (line.startsWith('## ')) {
+      flushList();
+      elements.push(
+        <div key={i} className="text-[28px] font-semibold text-white mt-6 mb-2">
+          {parseInlineStyles(line.slice(3))}
+        </div>
+      );
+    }
+    // 一级标题 #
+    else if (line.startsWith('# ')) {
+      flushList();
+      elements.push(
+        <div key={i} className="text-[32px] font-bold text-white mt-6 first:mt-0 mb-2">
+          {parseInlineStyles(line.slice(2))}
+        </div>
+      );
+    }
+    // 列表项 -
+    else if (line.startsWith('- ')) {
+      listItems.push(line.slice(2));
+    }
+    // 空行
+    else if (line.trim() === '') {
+      flushList();
+    }
+    // 普通段落
+    else {
+      flushList();
+      elements.push(
+        <p key={i} className="text-slate-300 leading-relaxed my-1">
+          {parseInlineStyles(line)}
+        </p>
   );
+    }
+  }
+
+  flushList();
+
+  return <div className="space-y-1">{elements}</div>;
 };
 
-// 主组件
+// --- 主组件 ---
+
 const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
   const { texts } = useLanguage();
-  const experienceData = getExperienceData(texts);
-  const [selectedItem, setSelectedItem] = useState<ExperienceItem | null>(null);
-  
-  // 霓虹配色方案
-  const colors = [
-    '#0ea5e9', // Sky Blue
-    '#8b5cf6', // Violet
-    '#22d3ee', // Cyan
-    '#f472b6', // Pink
-    '#a78bfa', // Purple
-  ];
-  
-  // 透明度动画控制
+  const [selectedModule, setSelectedModule] = useState<ModuleId | null>(null);
   const [shouldAnimateOpacity, setShouldAnimateOpacity] = useState(false);
   
   useEffect(() => {
@@ -452,21 +467,9 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
     }
   }, [custom]);
 
-  const containerVariants: Variants = {
-    initial: {},
-    animate: {},
-    exit: (custom?: CustomAnimationProps) => {
-      if (custom?.next === 'hero') {
-        return {
-          y: '100%',
-          scale: 0.9,
-          opacity: 0,
-          transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }
-        };
-      }
-      return {};
-    }
-  };
+  const selectedConfig = selectedModule 
+    ? moduleConfigs.find(c => c.id === selectedModule) 
+    : null;
 
   return (
     <motion.div
@@ -477,23 +480,27 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
       animate="animate"
       exit="exit"
     >
-      {/* 沉浸式背景光效 */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-sky-500/5 rounded-full blur-[100px]" />
+      {/* 背景光效 */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px]" />
       </div>
-
-      {/* 太阳系中心 */}
+      
+      {/* 主内容区域 */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+          
+          {/* 左侧：头像区域 */}
       <motion.div
-        layoutId="profile-image-container"
-        className="relative z-10 w-48 h-48 md:w-64 md:h-64 rounded-full shadow-[0_0_50px_rgba(14,165,233,0.3)]"
+            layoutId="profile-image-container"
+            className="relative z-10 flex-shrink-0"
         transition={{ 
-          duration: 0.7, 
-          ease: [0.4, 0, 0.2, 1]
-        }}
-        style={{
-           // 确保从 hero 跳转时透明度正确过渡
-           opacity: shouldAnimateOpacity || (custom?.prev !== 'hero') ? 1 : undefined 
-        }}
+            duration: 0.7, 
+            ease: [0.4, 0, 0.2, 1] 
+            }}
+            style={{
+              opacity: shouldAnimateOpacity || (custom?.prev !== 'hero') ? 1 : undefined 
+            }}
       >
         <motion.div
           variants={profileImageVariants}
@@ -501,67 +508,62 @@ const InteractiveExperience = ({ custom }: InteractiveExperienceProps) => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="w-full h-full relative rounded-full overflow-hidden border-4 border-slate-800/80 ring-1 ring-white/10"
-        >
+              className="relative"
+            >
+              {/* 外圈装饰 */}
+              <div className="absolute -inset-3 rounded-full border border-white/10 animate-pulse" />
+              <div className="absolute -inset-6 rounded-full border border-white/5" />
+              
+              {/* 头像 */}
+              <div className="relative w-36 h-36 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-slate-800 shadow-[0_0_60px_rgba(14,165,233,0.3)]">
           <Image
             src="/profile.jpg"
             alt={texts.hero.name}
             fill
-            className="object-cover"
+                  className="object-cover"
             priority
           />
-          {/* 叠加光泽效果 */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/10 to-transparent pointer-events-none" />
+                {/* 光泽叠加 */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/10 to-transparent pointer-events-none" />
+              </div>
+              
+              {/* 状态指示点 */}
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-4 border-slate-900 shadow-lg" />
         </motion.div>
       </motion.div>
 
-      {/* 轨道系统 */}
+          {/* 右侧：模块卡片网格 */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 flex items-center justify-center"
-        variants={orbitContainerVariants}
+            className="flex-1 w-full"
+            variants={cardContainerVariants}
         initial="hidden"
         animate="visible"
-        exit="exit"
+            exit="exit"
       >
-        {/* 绘制静态轨道线 - 使用 svg 获得更完美的圆和发光效果 */}
-        <svg className="absolute overflow-visible" style={{ width: '1000px', height: '1000px', pointerEvents: 'none' }}>
-           <defs>
-             <radialGradient id="orbit-gradient" cx="0.5" cy="0.5" r="0.5">
-               <stop offset="90%" stopColor="rgba(56, 189, 248, 0.1)" />
-               <stop offset="100%" stopColor="rgba(56, 189, 248, 0.0)" />
-             </radialGradient>
-           </defs>
-           {orbits.map((orbit, i) => (
-             <circle 
-               key={`orbit-line-${i}`}
-               cx="500" 
-               cy="500" 
-               r={orbit.radius} 
-               fill="none" 
-               stroke="rgba(255, 255, 255, 0.08)" 
-               strokeWidth="1.5"
-               strokeDasharray="4 4"
-               className="opacity-50"
-             />
-           ))}
-        </svg>
-
-        {/* 行星 */}
-        {experienceData.map((item, index) => (
-          <Planet
-            key={item.id}
-            item={item}
-            index={index}
-            onSelect={setSelectedItem}
-            orbit={orbits[index % orbits.length]}
-            color={colors[index % colors.length]}
+            <div className="grid grid-cols-3 gap-4 md:gap-5">
+              {moduleConfigs.map((config) => (
+                <ModuleCard
+                  key={config.id}
+                  config={config}
+                  texts={texts}
+                  onClick={() => setSelectedModule(config.id)}
           />
         ))}
+            </div>
       </motion.div>
+        </div>
+      </div>
 
-      {/* 详情卡片弹窗 */}
+      {/* 详情弹窗 */}
       <AnimatePresence>
-        {selectedItem && <DetailCard item={selectedItem} onDeselect={() => setSelectedItem(null)} />}
+        {selectedModule && selectedConfig && (
+          <DetailModal
+            moduleId={selectedModule}
+            config={selectedConfig}
+            texts={texts}
+            onClose={() => setSelectedModule(null)}
+          />
+        )}
       </AnimatePresence>
     </motion.div>
   );
