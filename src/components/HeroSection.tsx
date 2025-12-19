@@ -25,11 +25,12 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
   const { displayText: descText, isTyping: isDescTyping } = useTypewriter(texts.hero.description, { speed: 15, delay: 800 });
   
   // 圆形图片的尺寸
-  const circleSize = { base: 192, md: 256 }; // w-48 h-48 = 192px, md:w-64 md:h-64 = 256px
+  const circleSize = { base: 160, md: 256 }; // 移动端稍小，桌面端保持原大小
   const [dimensions, setDimensions] = useState({ 
     width: 1920, 
     height: 1080 
   });
+  const [isMobileView, setIsMobileView] = useState(false); // 是否为移动端视图
   const [isMounted, setIsMounted] = useState(false);
   const [circlePosition, setCirclePosition] = useState({ x: 0, y: 0 });
   const placeholderRef = useRef<HTMLDivElement>(null);
@@ -120,6 +121,7 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
           width: window.innerWidth, 
           height: window.innerHeight 
         });
+        setIsMobileView(window.innerWidth < 768);
       }
     };
 
@@ -345,50 +347,67 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
   return (
     // 使用 framer-motion 的 section 元素，作为动画容器
     <motion.section 
-      className="w-full h-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-16 p-8"
+      className="w-full h-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 p-6 md:p-8"
     >
-      {/* 左侧文本内容区域 */}
+      {/* 移动端：头像在上方 */}
+      {isMobileView && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="relative w-32 h-32 flex-shrink-0 md:hidden"
+        >
+          <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-cyan-500/30 to-blue-500/30 blur-lg" />
+          <Image
+            src="/profile.jpg"
+            alt={texts.hero.name}
+            fill
+            className="rounded-full object-cover border-4 border-slate-800 shadow-2xl relative z-10"
+            priority
+          />
+        </motion.div>
+      )}
+      
+      {/* 文本内容区域 */}
       <motion.div
-        // 定义进入动画：从左侧 -50px 的位置淡入
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        // 定义退出动画：向左侧 -50px 的位置淡出
-        exit={{ opacity: 0, x: -50, transition: { duration: 0.3 } }}
+        initial={{ opacity: 0, x: isMobileView ? 0 : -50, y: isMobileView ? 20 : 0 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        exit={{ opacity: 0, x: isMobileView ? 0 : -50, transition: { duration: 0.3 } }}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="text-center md:text-left flex-1 md:flex-none md:w-1/2 overflow-visible"
         style={{ overflow: 'visible' }}
       >
-        {/* 主标题：姓名 - 固定高度容器 */}
-        <div className="mb-4 flex items-center" style={{ minHeight: '6rem', paddingTop: '2rem', paddingBottom: '2rem', overflow: 'visible' }}>
-          <h1 className="text-5xl md:text-7xl font-bold relative" style={{ overflow: 'visible' }}>
+        {/* 主标题：姓名 */}
+        <div className="mb-2 md:mb-4 flex items-center justify-center md:justify-start" style={{ minHeight: isMobileView ? '3rem' : '6rem', paddingTop: isMobileView ? '0.5rem' : '2rem', paddingBottom: isMobileView ? '0.5rem' : '2rem', overflow: 'visible' }}>
+          <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold relative" style={{ overflow: 'visible' }}>
             <span className="gradient-text-wrapper inline-block relative">
               <span className="gradient-text inline-block relative z-10">{nameText}</span>
             </span>
             {isNameTyping && (
-              <span className="inline-block w-1 h-12 md:h-16 bg-sky-400 ml-1 animate-pulse relative z-10"></span>
+              <span className="inline-block w-0.5 md:w-1 h-8 md:h-16 bg-sky-400 ml-1 animate-pulse relative z-10"></span>
             )}
           </h1>
         </div>
-        {/* 副标题：个人简介 - 固定高度容器 */}
-        <div className="h-32 md:h-40 mb-8 max-w-2xl">
-          <p className="text-lg md:text-xl text-slate-300 whitespace-pre-line">
+        {/* 副标题：个人简介 */}
+        <div className="min-h-[6rem] md:h-40 mb-4 md:mb-8 max-w-2xl mx-auto md:mx-0">
+          <p className="text-sm sm:text-base md:text-xl text-slate-300 whitespace-pre-line leading-relaxed">
             {descText}
             {isDescTyping && (
-              <span className="inline-block w-1 h-5 md:h-6 bg-sky-400 ml-1 animate-pulse"></span>
+              <span className="inline-block w-0.5 md:w-1 h-4 md:h-6 bg-sky-400 ml-1 animate-pulse"></span>
             )}
           </p>
         </div>
       </motion.div>
 
-      {/* 右侧图片区域 - 固定位置（占位，保持布局） */}
-      <div ref={placeholderRef} className="relative flex justify-center flex-shrink-0 w-48 h-48 md:w-64 md:h-64">
+      {/* 桌面端：右侧图片区域 - 固定位置（占位，保持布局） */}
+      <div ref={placeholderRef} className="relative hidden md:flex justify-center flex-shrink-0 w-48 h-48 md:w-64 md:h-64">
         {/* 占位元素，保持原有布局空间 */}
         <div className="relative w-full h-full" />
       </div>
 
-      {/* 多列竖向排列的圆形图片 - 使用 fixed 定位相对于视口，仅在客户端渲染 */}
+      {/* 多列竖向排列的圆形图片 - 使用 fixed 定位相对于视口，仅在桌面端渲染 */}
       {/* 中心圆形需要立即渲染以支持 layoutId 动画，但必须在客户端渲染以避免 hydration mismatch */}
-      {isMounted && (() => {
+      {isMounted && !isMobileView && (() => {
         // 计算中心圆形的实际位置（第一列的位置，而不是占位元素的位置）
         const getCenterCircleActualPosition = () => {
           if (!circlePosition.x || !circlePosition.y) {
@@ -644,8 +663,8 @@ const HeroSection = ({ custom }: HeroSectionProps) => {
         );
       })()}
       
-      {/* 非中心圆形，仅在 isMounted 时渲染 */}
-      {isMounted && (
+      {/* 非中心圆形，仅在桌面端渲染 */}
+      {isMounted && !isMobileView && (
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
           <AnimatePresence mode="popLayout">
             {showCircles && (() => {

@@ -276,3 +276,19 @@ p {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 移动端安全区域适配 */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* 移动端触摸优化 */
+@media (max-width: 767px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  button, a {
+    touch-action: manipulation;
+  }
+}

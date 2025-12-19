@@ -7,12 +7,31 @@ import InteractiveExperience from '@/components/InteractiveExperience';
 import AIChatSection from '@/components/AIChatSection';
 import AlgoRhythmSection from '@/components/AlgoRhythmSection';
 import SideNav from '@/components/SideNav';
+import MobileNav from '@/components/MobileNav';
 
 // 定义视图类型的联合类型，用于表示当前显示的页面部分
 type View = 'hero' | 'experience' | 'chat' | 'contact';
 
+// 检测是否为移动设备
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  return isMobile;
+};
+
 // 主页组件，管理整个单页应用的视图切换和状态
 export default function Home() {
+  const isMobile = useIsMobile();
   // 'view' state 用于跟踪当前显示的页面部分
   const [view, setView] = useState<View>('hero');
   const prevViewRef = useRef<View>(view);
@@ -34,8 +53,10 @@ export default function Home() {
     { id: 'contact' as View, component: <div className="w-full h-full flex items-center justify-center"><AlgoRhythmSection /></div>, index: 3 },
   ], []);
 
-  // useEffect 用于处理鼠标滚轮事件，实现页面内容的滚动切换
+  // useEffect 用于处理鼠标滚轮事件，实现页面内容的滚动切换（仅桌面端）
   useEffect(() => {
+    if (isMobile) return; // 移动端不使用滚轮切换
+
     const handleWheel = (e: WheelEvent) => {
       if (isWheeling) return; // 如果正在滚动动画中，则忽略新的滚动事件
 
@@ -73,16 +94,23 @@ export default function Home() {
 
     window.addEventListener('wheel', handleWheel);
     return () => window.removeEventListener('wheel', handleWheel);
-  }, [view, isWheeling, sections]);
+  }, [view, isWheeling, sections, isMobile]);
 
 
   // 根据当前 'view' state 找到要渲染的组件
   const activeComponent = sections.find((sec) => sec.id === view)?.component;
 
-  // 侧边导航栏的导航处理函数
+  // 导航处理函数（桌面端和移动端共用）
   const handleNavigate = (newView: View) => {
     if (isWheeling) return; // 防止在动画期间重复点击
     
+    // 移动端简化动画
+    if (isMobile) {
+      setView(newView);
+      return;
+    }
+    
+    // 桌面端保留原有动画逻辑
     // 如果从 hero 跳转到 experience，先设置 pendingView 触发消失动画
     if (view === 'hero' && newView === 'experience') {
       setIsWheeling(true);
@@ -114,17 +142,27 @@ export default function Home() {
 
   return (
     <>
-      {/* 侧边导航栏，显示当前活动视图并处理导航 */}
-      <SideNav activeView={view} onNavigate={handleNavigate} />
-      {/* 主内容区域，占据整个屏幕 */}
-      <div className="relative w-screen h-screen overflow-hidden">
+      {/* 桌面端侧边导航栏 */}
+      <div className="hidden md:block">
+        <SideNav activeView={view} onNavigate={handleNavigate} />
+      </div>
+      
+      {/* 移动端底部导航栏 */}
+      <MobileNav activeView={view} onNavigate={handleNavigate} />
+      
+      {/* 主内容区域 */}
+      <div className="relative w-screen h-screen overflow-hidden pb-16 md:pb-0">
         {/* AnimatePresence 用于处理组件进入和退出时的动画 */}
-        <AnimatePresence initial={false} custom={{ next: view, prev: prevViewRef.current }}>
+        <AnimatePresence initial={false} custom={{ next: view, prev: prevViewRef.current }} mode={isMobile ? 'wait' : 'sync'}>
           {activeComponent && (
             // motion.div 用于为视图切换添加动画效果
             <motion.div
-              key={view} // key 的变化会触发组件的重新渲染和动画
+              key={view}
               className="absolute inset-0 w-full h-full"
+              initial={isMobile ? { opacity: 0, x: 20 } : false}
+              animate={isMobile ? { opacity: 1, x: 0 } : undefined}
+              exit={isMobile ? { opacity: 0, x: -20 } : undefined}
+              transition={isMobile ? { duration: 0.3 } : undefined}
             >
               {cloneElement(activeComponent, { custom: { next: pendingView || view, prev: prevViewRef.current } })}
             </motion.div>

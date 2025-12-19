@@ -3,7 +3,6 @@ import "./globals.css";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import LanguageToggle from "@/components/LanguageToggle";
-import MobileBlockWrapper from "@/components/MobileBlockWrapper";
 
 export const metadata: Metadata = {
   title: "Chengxun Hong - Personal Portfolio",
@@ -15,6 +14,7 @@ export const metadata: Metadata = {
     description: "Chengxun Hong's personal portfolio",
     type: "website",
   },
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 };
 
 export default function RootLayout({
@@ -26,11 +26,9 @@ export default function RootLayout({
     <html lang="zh">
       <body className="font-sans">
         <LanguageProvider>
-          <MobileBlockWrapper>
-            <ParticlesBackground />
-            <LanguageToggle />
-            <main>{children}</main>
-          </MobileBlockWrapper>
+          <ParticlesBackground />
+          <LanguageToggle />
+          <main>{children}</main>
         </LanguageProvider>
       </body>
     </html>
