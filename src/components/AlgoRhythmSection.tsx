@@ -51,7 +51,7 @@ const AlgoRhythmSection = () => {
   };
 
   return (
-    <section className="w-full h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative overflow-hidden flex flex-col justify-center">
+    <section className="w-full h-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12 md:py-24 relative overflow-hidden flex flex-col justify-center">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
