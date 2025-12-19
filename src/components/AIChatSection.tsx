@@ -198,29 +198,38 @@ const UserIcon = () => (
 );
 
 // AI 正在输入时的指示器组件
-const TypingIndicator = () => (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-    className="flex justify-start"
-    style={{ marginBottom: '24px' }}
-  >
-    <AIIcon />
-    <div className="relative bg-slate-800/30 backdrop-blur-md border border-cyan-500/20 rounded-xl max-w-xl shadow-lg shadow-cyan-500/5" style={{ padding: '16px 18px', display: 'flex', alignItems: 'center', minHeight: '48px' }}>
-      {/* 科技感边框效果 */}
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 via-transparent to-blue-500/5 opacity-50"></div>
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent"></div>
-      <div className="relative w-full flex items-center justify-center">
-        <div className="typing-indicator">
-          <div className="typing-dot"></div>
-          <div className="typing-dot"></div>
-          <div className="typing-dot"></div>
+const TypingIndicator = ({ language }: { language: 'zh' | 'en' }) => {
+  const loadingText = language === 'zh' 
+    ? '正在检索中...' 
+    : 'Retrieving personal info...';
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex justify-start"
+      style={{ marginBottom: '24px' }}
+    >
+      <AIIcon />
+      <div className="relative bg-slate-800/30 backdrop-blur-md border border-cyan-500/20 rounded-xl max-w-xl shadow-lg shadow-cyan-500/5" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', minHeight: '52px' }}>
+        {/* 科技感边框效果 */}
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/5 via-transparent to-blue-500/5 opacity-50"></div>
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent"></div>
+        <div className="relative flex items-center gap-4">
+          {/* 加载动画 */}
+          <div className="typing-indicator">
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+          </div>
+          {/* 加载文字 */}
+          <span className="text-slate-400 text-sm font-medium">{loadingText}</span>
         </div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 // API 路由配置（通过服务端代理调用，避免 CORS 和密钥暴露问题）
 const CHAT_API_ENDPOINT = '/api/chat';
@@ -651,7 +660,7 @@ export default function AIChatSection() {
           </motion.div>
           ))
         )}
-        {isTyping && <TypingIndicator />}
+        {isTyping && <TypingIndicator language={language} />}
       </div>
 
       <div className="p-6">

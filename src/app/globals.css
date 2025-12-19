@@ -232,6 +232,47 @@ p {
   50% { opacity: 0; }
 }
 
+/* AI 加载动画 - 三个跳动的点 */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  animation: typing-bounce 1.4s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.8);
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
